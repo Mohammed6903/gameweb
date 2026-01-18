@@ -27,7 +27,7 @@ ADD COLUMN "new_id" UUID DEFAULT gen_random_uuid();
 
 -- Copy existing data to the new column
 UPDATE "public"."game_plays" 
-SET "new_id" = uuid_generate_v4();
+SET "new_id" = gen_random_uuid();
 
 -- Drop the old id column
 ALTER TABLE "public"."game_plays" DROP COLUMN "id";

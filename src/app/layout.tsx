@@ -61,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // Process site metadata
   const metaData = metaResult.status === 200 ? metaResult.data || {} : {};
-  const siteTitle = metaData.site_name || "Paneer World";
+  const siteTitle = metaData.site_name || "Game Web";
   const siteDescription =
     metaData.description || "A Gaming website for people of all ages";
 

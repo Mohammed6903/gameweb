@@ -60,7 +60,7 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
           text-2xl font-bold text-white
           transition-opacity duration-300
         `}>
-          {siteName ? siteName : 'Paneer World'}
+          {siteName ? siteName : 'Game Web'}
         </h1>
       </SidebarHeader>
       <SidebarContent className='bg-purple-700 custom-scrollbar'>

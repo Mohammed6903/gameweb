@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const game = await getGameBySlug(params.slug);
   const metaResult = await getMeta();
   const metaData = metaResult.status === 200 ? metaResult.data || {} : {};
-  const siteTitle = metaData.site_name || "Paneer World";
+  const siteTitle = metaData.site_name || "Game Web";
   
   return {
     title: `Play ${game.name} | ${siteTitle}`,

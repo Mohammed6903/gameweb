@@ -6,6 +6,6 @@ interface MetadataState {
 }
 
 export const useMetadataStore = create<MetadataState>((set) => ({
-  siteName: 'Paneer World',
+  siteName: 'Game Web',
   setSiteName: (siteName) => set({ siteName }),
 }));

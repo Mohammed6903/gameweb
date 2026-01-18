@@ -18,8 +18,7 @@ CREATE SCHEMA IF NOT EXISTS "domain_access";
 ALTER SCHEMA "domain_access" OWNER TO "postgres";
 
 
-CREATE EXTENSION IF NOT EXISTS "pgsodium" WITH SCHEMA "pgsodium";
-
+CREATE EXTENSION IF NOT EXISTS "pgsodium";
 
 
 
