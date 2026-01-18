@@ -74,10 +74,8 @@ export async function updateAdSettings(adSettings: AdSettings) {
     }
 }
 
-import { JSDOM } from "jsdom";
-
 /**
- * Parse a DOM element as text and get all its attributes in JSON format (Node.js/Server-side).
+ * Parse a DOM element as text and get all its attributes in JSON format (Server-side, no JSDOM).
  * @param elementText - The serialized HTML string of the element.
  * @returns A JSON object containing all attributes of the element.
  */
@@ -88,25 +86,26 @@ export async function parseElementAttributesFromText(
         throw new Error("Invalid element text provided. Must be a non-empty string.");
     }
 
-    // Use JSDOM to parse the HTML string
-    const dom = new JSDOM(elementText.trim());
-    const element = dom.window.document.body.firstElementChild;
-
-    if (!element) {
+    const trimmed = elementText.trim();
+    
+    // Extract tag name
+    const tagMatch = trimmed.match(/^<(\w+)/);
+    if (!tagMatch) {
         throw new Error("Invalid HTML structure. Could not parse element.");
     }
-
-    // Extract attributes
+    
+    const type = tagMatch[1].toLowerCase();
+    
+    // Extract all attributes using regex
     const attributes: Record<string, string> = {};
-    for (const attr of element.attributes) {
-        attributes[attr.name] = attr.value;
+    const attrRegex = /(\w+(?:-\w+)*)=["']([^"']*)["']/g;
+    let match;
+    
+    while ((match = attrRegex.exec(trimmed)) !== null) {
+        attributes[match[1]] = match[2];
     }
 
-    // Return attributes along with the element type (e.g., div, ins, etc.)
-    return {
-        attributes,
-        type: element.tagName.toLowerCase(),
-    };
+    return { attributes, type };
 }
 
 export async function getAllScripts(): Promise<{status: number, data?: SavedScript[], message?: string}> {
