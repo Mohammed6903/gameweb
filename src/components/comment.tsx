@@ -27,6 +27,7 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
     const loadComments = async () => {
       try {
         const data = await fetchComments(gameId);
+        console.log('Fetched comments:', data); // Debug log
         setComments(data);
       } catch (error) {
         console.error("Failed to fetch comments:", error);
@@ -55,6 +56,7 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
       }
   
       if (data) {
+        console.log('Posted comment:', data); // Debug log
         setComments([data, ...comments]); 
         setNewComment("");
         toast.success('Comment posted successfully!');
@@ -67,15 +69,12 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
 
   const formatDate = (dateString: string) => {
     try {
-      // Try parsing the date string
       const date = new Date(dateString);
       
-      // Check if date is valid
       if (isNaN(date.getTime())) {
         return 'Just now';
       }
       
-      // Format the date
       return date.toLocaleString(undefined, {
         year: 'numeric',
         month: 'short',
@@ -87,6 +86,20 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
       console.error('Date parsing error:', error, dateString);
       return 'Just now';
     }
+  };
+
+  const getUserInitial = (user: string | undefined | null) => {
+    if (!user || typeof user !== 'string' || user.trim().length === 0) {
+      return 'U'; // Default to 'U' for User
+    }
+    return user.charAt(0).toUpperCase();
+  };
+
+  const getUserName = (user: string | undefined | null) => {
+    if (!user || typeof user !== 'string' || user.trim().length === 0) {
+      return 'Anonymous User';
+    }
+    return user;
   };
   
   return (
@@ -119,12 +132,12 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
             <div key={comment.id} className="flex gap-3 p-4 rounded-lg bg-card/50 border border-border/50">
               <Avatar className="h-10 w-10 border-2 border-border">
                 <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                  {comment.user.charAt(0).toUpperCase()}
+                  {getUserInitial(comment.user)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-1">
                 <div className="flex items-center gap-2">
-                  <p className="font-semibold text-foreground">{comment.user}</p>
+                  <p className="font-semibold text-foreground">{getUserName(comment.user)}</p>
                   <span className="text-xs text-muted-foreground">•</span>
                   <p className="text-xs text-muted-foreground">{formatDate(comment.createdAt)}</p>
                 </div>
