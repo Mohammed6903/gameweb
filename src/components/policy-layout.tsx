@@ -24,24 +24,26 @@ function SafeHTML({ html }: { html: string }) {
 
 export function PolicyLayout({ title, children }: PolicyLayoutProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm">
+          <ol className="flex items-center space-x-2 text-sm text-muted-foreground">
             <li>
-              <Link href="/" className="hover:text-purple-300 transition-colors">
+              <Link href="/" className="hover:text-primary transition-colors">
                 Home
               </Link>
             </li>
             <ChevronRight className="h-4 w-4" />
-            <li className="font-semibold">{title}</li>
+            <li className="font-semibold text-foreground">{title}</li>
           </ol>
         </nav>
-        <h1 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+        <h1 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
           {title}
         </h1>
-        <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 shadow-lg">
-          {children}
+        <div className="bg-card/60 backdrop-blur-md rounded-xl p-8 shadow-lg border border-border/50">
+          <div className="prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/90 prose-strong:text-foreground prose-li:text-foreground/90 prose-a:text-primary hover:prose-a:text-primary/80">
+            {children}
+          </div>
         </div>
       </div>
     </div>

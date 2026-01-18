@@ -61,103 +61,120 @@ export function ProviderForm({ onSubmit }: ProviderFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 pb-4 hide-scrollbar">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-200">Provider Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter provider name" {...field} className="bg-gray-700 text-gray-100 border-gray-600" />
-              </FormControl>
-              <FormMessage className="text-red-400" />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 pb-4 hide-scrollbar">
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Provider Information</h3>
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Provider Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter provider name" {...field} className="bg-muted border-border text-foreground placeholder:text-muted-foreground" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-200">Website URL</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com" {...field} className="bg-gray-700 text-gray-100 border-gray-600" />
-              </FormControl>
-              <FormMessage className="text-red-400" />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Website URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com" {...field} className="bg-muted border-border text-foreground placeholder:text-muted-foreground" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-200">Description</FormLabel>
-              <FormControl>
-                <Textarea 
-                  placeholder="Enter provider description (optional)" 
-                  {...field} 
-                  className="bg-gray-700 text-gray-100 border-gray-600"
-                />
-              </FormControl>
-              <FormDescription className="text-gray-400">
-                Provide a brief description of the provider (optional).
-              </FormDescription>
-              <FormMessage className="text-red-400" />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Description</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Enter provider description (optional)" 
+                    {...field} 
+                    className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[100px]"
+                  />
+                </FormControl>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Provide a brief description of the provider (optional).
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="logo_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-200">Logo URL</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/logo.png" {...field} className="bg-gray-700 text-gray-100 border-gray-600" />
-              </FormControl>
-              <FormDescription className="text-gray-400">
-                Enter the URL of the provider's logo image (optional).
-              </FormDescription>
-              <FormMessage className="text-red-400" />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="logo_url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Logo URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com/logo.png" {...field} className="bg-muted border-border text-foreground placeholder:text-muted-foreground" />
+                </FormControl>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Enter the URL of the provider's logo image (optional).
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        <FormField
-          control={form.control}
-          name="is_active"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border border-gray-600 p-4 bg-gray-800">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base text-gray-200">
-                  Active Status
-                </FormLabel>
-                <FormDescription className="text-gray-400">
-                  Set whether this provider is currently active.
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <div className="border-t border-border pt-6">
+          <FormField
+            control={form.control}
+            name="is_active"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-4 bg-muted">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-sm font-medium text-foreground">
+                    Active Status
+                  </FormLabel>
+                  <p className="text-xs text-muted-foreground">
+                    Set whether this provider is currently active.
+                  </p>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
 
-        <Button 
-          type="submit" 
-          disabled={isSubmitting}
-          className="bg-purple-600 text-white hover:bg-purple-700 disabled:bg-purple-800 disabled:text-gray-300"
-        >
-          {isSubmitting ? 'Adding Provider...' : 'Add Provider'}
-        </Button>
+        <div className="flex gap-3 justify-end pt-6 border-t border-border">
+          <Button 
+            variant="outline" 
+            type="button"
+            className="border-border text-foreground hover:bg-muted bg-transparent"
+          >
+            Cancel
+          </Button>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {isSubmitting ? 'Adding Provider...' : 'Add Provider'}
+          </Button>
+        </div>
       </form>
     </Form>
   );

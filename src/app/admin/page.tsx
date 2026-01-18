@@ -6,6 +6,7 @@ import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { QuickStatsCard } from "@/components/admin/quick-stat-card"
 import { ChartCard } from "@/components/admin/chart-card"
 import type { ApexOptions } from "apexcharts"
+import Loading from "./loading"
 
 const GameAnalyticsDashboard = () => {
   const {
@@ -122,9 +123,7 @@ const GameAnalyticsDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
-      </div>
+      <Loading />
     )
   }
 
@@ -137,56 +136,52 @@ const GameAnalyticsDashboard = () => {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-800">
-      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 mb-6">
-        Analytics Dashboard
-      </h1>
+    <div className="space-y-8 p-6 md:p-8 bg-background text-foreground">
+      <div>
+        <h1 className="text-4xl font-bold text-foreground">Analytics Dashboard</h1>
+        <p className="text-muted-foreground mt-2">Monitor your game performance and metrics</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {quickStats.map((stat) => (
           <QuickStatsCard key={stat.title} stat={stat} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {playsOverTimeSeries[0]?.data?.length > 0 && (
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-800 shadow-sm">
-            <ChartCard
-              title="Weekly Game Plays"
-              options={playsOverTimeOptions}
-              series={playsOverTimeSeries}
-              type="line"
-              height={350}
-            />
-          </div>
+          <ChartCard
+            title="Weekly Game Plays"
+            options={playsOverTimeOptions}
+            series={playsOverTimeSeries}
+            type="line"
+            height={350}
+          />
         )}
 
         {gameCategorySeries?.length > 0 && (
-          <div className="p-4 border border-gray-700 rounded-lg bg-gray-800 shadow-sm">
-            <ChartCard
-              title="Game Categories"
-              options={gameCategoryOptions}
-              series={gameCategorySeries}
-              type="donut"
-              height={350}
-            />
-          </div>
+          <ChartCard
+            title="Game Categories"
+            options={gameCategoryOptions}
+            series={gameCategorySeries}
+            type="donut"
+            height={350}
+          />
         )}
       </div>
 
-      <div>
-        <h2 className="text-2xl font-semibold mb-4 text-gray-200">Quick Actions</h2>
-        <div className="flex space-x-4">
+      <div className="bg-card border border-border rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">Quick Actions</h2>
+        <div className="flex flex-wrap gap-3">
           <Link href="/admin/add-game">
             <Button
-              variant="default"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               Add New Game
             </Button>
           </Link>
           <Link href="/admin/manage-games">
-            <Button variant="outline" className="text-gray-200 border-gray-600 hover:bg-gray-700">
+            <Button variant="outline" className="border-border text-foreground hover:bg-muted bg-transparent">
               Manage Games
             </Button>
           </Link>

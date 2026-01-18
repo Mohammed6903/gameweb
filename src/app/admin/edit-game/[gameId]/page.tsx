@@ -24,12 +24,14 @@ export default async function EditGamePage({
     }
 
     return (
-      <div className="max-w-2xl mx-auto m-12 p-6 bg-gray-900 text-gray-100">
-        <Card className="bg-gray-800 border-gray-700 shadow-lg rounded-lg">
-          <CardContent className="p-6">
-            <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 mb-6">
-              Edit Game
-            </h1>
+      <div className="space-y-6 p-6 md:p-8 bg-background text-foreground max-w-4xl mx-auto">
+        <div>
+          <h1 className="text-4xl font-bold text-foreground">Edit Game</h1>
+          <p className="text-muted-foreground mt-2">Update game information and settings</p>
+        </div>
+        
+        <Card className="bg-card border-border shadow-sm">
+          <CardContent className="p-6 md:p-8">
             <EditGameClient initialGame={gameById} providers={providers} categories={categories} tags={tags} />
           </CardContent>
         </Card>

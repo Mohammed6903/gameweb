@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -63,49 +65,53 @@ export function UserList({ users, currentPage, totalPages, onPageChange, onDelet
 
   return (
     <div className="space-y-4">
-      <div className="flex space-x-2">
-        <Input
-          placeholder="Search users..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
-        />
-        <Button variant="outline" className="text-gray-300 border-gray-700 hover:bg-gray-800">
-          <Search className="h-4 w-4" />
-        </Button>
+      <div className="flex gap-2">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 bg-muted border-border text-foreground placeholder:text-muted-foreground"
+          />
+        </div>
       </div>
-      <div className="rounded-md border border-gray-700 overflow-hidden">
+      <div className="rounded-lg border border-border overflow-hidden shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gray-900 hover:bg-gray-900 border-b border-gray-700">
-              <TableHead className="text-gray-300">Email</TableHead>
-              <TableHead className="text-gray-300">Role</TableHead>
-              <TableHead className="text-gray-300">Actions</TableHead>
+            <TableRow className="bg-muted hover:bg-muted border-b border-border">
+              <TableHead className="text-foreground font-semibold">Email</TableHead>
+              <TableHead className="text-foreground font-semibold">Role</TableHead>
+              <TableHead className="text-foreground font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredUsers.map((user) => (
-              <TableRow key={user.id} className="hover:bg-gray-800 border-b border-gray-700">
-                <TableCell className="text-gray-300">{user.email}</TableCell>
-                <TableCell className="text-gray-300">{user.role}</TableCell>
+              <TableRow key={user.id} className="hover:bg-muted/50 border-b border-border transition-colors">
+                <TableCell className="text-foreground">{user.email}</TableCell>
+                <TableCell className="text-foreground">
+                  <span className="px-2 py-1 rounded text-xs font-medium bg-muted text-muted-foreground">
+                    {user.role}
+                  </span>
+                </TableCell>
                 <TableCell>
-                  <div className="flex space-x-2">
+                  <div className="flex gap-2">
                     {user.role !== "admin" && (
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={() => handlePromoteClick(user.id)}
-                        className="text-blue-400 border-blue-500 hover:bg-blue-950"
+                        className="text-primary hover:text-primary hover:bg-primary/10"
                       >
                         <UserPlus className="h-4 w-4" />
                       </Button>
                     )}
                     {(user.role !== 'admin') && (
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteClick(user.id)}
-                        className="text-red-400 border-red-500 hover:bg-red-950"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -117,54 +123,54 @@ export function UserList({ users, currentPage, totalPages, onPageChange, onDelet
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-center mt-6">
         <Button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           variant="outline"
-          className="text-gray-300 border-gray-700 hover:bg-gray-800 disabled:text-gray-600"
+          className="border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronLeft className="h-4 w-4 mr-2" /> Previous
         </Button>
-        <span className="text-gray-300">
+        <span className="text-sm text-muted-foreground">
           Page {currentPage} of {totalPages}
         </span>
         <Button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           variant="outline"
-          className="text-gray-300 border-gray-700 hover:bg-gray-800 disabled:text-gray-600"
+          className="border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next <ChevronRight className="h-4 w-4 ml-2" />
         </Button>
       </div>
 
       <AlertDialog open={promotingUserId !== null} onOpenChange={() => setPromotingUserId(null)}>
-        <AlertDialogContent className="bg-gray-900 border border-gray-700">
+        <AlertDialogContent className="bg-card border border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-gray-100">Promote User to Admin</AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-300">
+            <AlertDialogTitle className="text-foreground">Promote User to Admin</AlertDialogTitle>
+            <AlertDialogDescription className="text-muted-foreground">
               Are you sure you want to promote this user to Admin? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmPromote} className="bg-blue-600 text-white hover:bg-blue-700">Confirm</AlertDialogAction>
+            <AlertDialogCancel className="bg-muted border-border text-foreground hover:bg-muted/80">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmPromote} className="bg-primary hover:bg-primary/90 text-primary-foreground">Confirm</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
       <AlertDialog open={deletingUserId !== null} onOpenChange={() => setDeletingUserId(null)}>
-        <AlertDialogContent className="bg-gray-900 border border-gray-700">
+        <AlertDialogContent className="bg-card border border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-gray-100">Delete User</AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-300">
+            <AlertDialogTitle className="text-foreground">Delete User</AlertDialogTitle>
+            <AlertDialogDescription className="text-muted-foreground">
               Are you sure you want to delete this user? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDelete} className="bg-red-600 text-white hover:bg-red-700">Confirm</AlertDialogAction>
+            <AlertDialogCancel className="bg-muted border-border text-foreground hover:bg-muted/80">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete} className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">Confirm</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

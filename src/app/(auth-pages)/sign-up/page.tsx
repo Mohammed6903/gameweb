@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { signUpAction } from "@/lib/actions/authActions";
+import { signUpAction } from "@/lib/actions/auth-actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";

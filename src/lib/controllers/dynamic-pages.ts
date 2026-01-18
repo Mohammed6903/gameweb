@@ -114,12 +114,59 @@ export async function getContactInfo(): Promise<ContactInfo> {
 }
 
 export const upsertContactInfo = async (contactInfo: ContactInfo) => {
-  const { id, title, description, address, email, phone, formTitle, formDescription, socialTitle, socialLinks } = contactInfo;
+  const {
+    title,
+    description,
+    address,
+    email,
+    phone,
+    formTitle,
+    formDescription,
+    socialTitle,
+    socialLinks,
+  } = contactInfo;
+
   const supabase = await createClient();
+
   try {
+    const { data: existing, error: existingError } = await supabase
+      .from('contact_info')
+      .select('id')
+      .limit(1)
+      .single();
+
+    if (existingError && existingError.code !== 'PGRST116') {
+      throw new Error(`Error fetching contact info: ${existingError.message}`);
+    }
+
+    if (existing?.id) {
+      const { data, error } = await supabase
+        .from('contact_info')
+        .update({
+          title,
+          description,
+          address,
+          email,
+          phone,
+          form_title: formTitle,
+          form_description: formDescription,
+          social_title: socialTitle,
+          social_links: socialLinks,
+        })
+        .eq('id', existing.id)
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(`Error updating contact info: ${error.message}`);
+      }
+
+      return data;
+    }
+
     const { data, error } = await supabase
       .from('contact_info')
-      .update({
+      .insert({
         title,
         description,
         address,
@@ -129,10 +176,12 @@ export const upsertContactInfo = async (contactInfo: ContactInfo) => {
         form_description: formDescription,
         social_title: socialTitle,
         social_links: socialLinks,
-      }).eq('id', id);
+      })
+      .select()
+      .single();
 
     if (error) {
-      throw new Error(`Error updating contact info: ${error.message}`);
+      throw new Error(`Error creating contact info: ${error.message}`);
     }
 
     return data;

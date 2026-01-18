@@ -42,24 +42,24 @@ export function DeleteGameDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="sm">
+        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10">
           Delete
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-card border-border">
         <DialogHeader>
-          <DialogTitle>Delete Game</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-foreground">Delete Game</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Are you sure you want to delete the game "{gameTitle}"?
             This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="border-border text-foreground hover:bg-muted bg-transparent">Cancel</Button>
           </DialogClose>
           <Button 
-            variant="destructive" 
+            className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
             onClick={handleDelete}
             disabled={isDeleting}
           >

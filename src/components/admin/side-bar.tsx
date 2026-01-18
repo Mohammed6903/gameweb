@@ -77,7 +77,7 @@ export function Sidebar() {
   ];
 
   const SidebarContent = () => (
-    <nav className="space-y-2">
+    <nav className="space-y-1">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -87,25 +87,21 @@ export function Sidebar() {
             key={item.href}
             href={item.href}
             className={`
-              flex items-center p-3 rounded-xl transition-all duration-300 
+              flex items-center px-4 py-3 rounded-lg transition-all duration-200 group relative
               ${isActive 
-                ? `${item.activeBackground} ${item.activeColor} shadow-md` 
-                : `${item.hoverBackground} ${item.hoverColor} text-gray-600`
+                ? 'bg-primary text-primary-foreground shadow-md' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }
-              group relative w-full
             `}
           >
             <Icon 
-              className={`mr-3 transition-all duration-300 
-                ${isActive 
-                  ? `${item.activeColor} scale-110` 
-                  : 'group-hover:scale-110'
-                }`} 
-              size={24} 
+              className={`mr-3 h-5 w-5 transition-all duration-200 
+                ${isActive ? 'text-primary-foreground' : 'group-hover:text-foreground'}
+              `}
             />
-            <span className="font-medium">{item.label}</span>
+            <span className="text-sm font-medium">{item.label}</span>
             {isActive && (
-              <div className="absolute right-2 w-2 h-2 bg-white rounded-full animate-pulse" />
+              <div className="absolute right-3 w-1.5 h-1.5 bg-primary-foreground rounded-full" />
             )}
           </Link>
         );
@@ -117,21 +113,19 @@ export function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <aside className="
-        hidden lg:block fixed left-0 top-0 h-full w-64 
-        bg-gradient-to-b from-white to-gray-50 
-        border-r-2 border-gray-100 shadow-2xl p-4 
-        overflow-y-auto z-40
+        hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 
+        bg-card border-r border-border p-6 
+        overflow-y-auto z-40 shadow-sm
       ">
-        <div className="flex flex-col h-full">
-          <div className="mb-8 text-center">
-            <h2 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
-              Admin Panel
-            </h2>
-          </div>
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-foreground">Admin</h2>
+          <p className="text-xs text-muted-foreground mt-1">Dashboard</p>
+        </div>
+        <div className="flex-1">
           <SidebarContent />
-          <div className="mt-auto mb-4 text-center text-xs text-gray-400">
-            © {new Date().getFullYear()} Admin Dashboard
-          </div>
+        </div>
+        <div className="text-center text-xs text-muted-foreground pt-4 border-t border-border">
+          © {new Date().getFullYear()} All rights reserved
         </div>
       </aside>
 
@@ -140,23 +134,24 @@ export function Sidebar() {
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button 
-              variant="outline" 
+              variant="default"
               size="icon"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[280px] bg-gradient-to-b from-white to-gray-50">
-            <div className="flex flex-col h-full">
-              <div className="mb-8 text-center">
-                <h2 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
-                  Admin Panel
-                </h2>
+          <SheetContent side="left" className="w-64 bg-card border-border p-0">
+            <div className="flex flex-col h-full p-6">
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-foreground">Admin</h2>
+                <p className="text-xs text-muted-foreground mt-1">Dashboard</p>
               </div>
-              <SidebarContent />
-              <div className="mt-auto mb-4 text-center text-xs text-gray-400">
-                © {new Date().getFullYear()} Admin Dashboard
+              <div className="flex-1">
+                <SidebarContent />
+              </div>
+              <div className="text-center text-xs text-muted-foreground pt-4 border-t border-border">
+                © {new Date().getFullYear()} All rights reserved
               </div>
             </div>
           </SheetContent>

@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { signOutAction } from "@/lib/actions/authActions"
+import { signOutAction } from "@/lib/actions/auth-actions"
 import { getLikedGameDetails } from "@/lib/controllers/like"
 import { getFavIconByType, getFavIcons } from "@/lib/controllers/meta"
 

@@ -2,8 +2,9 @@ import { PolicyLayout, SafeHTML } from '@/components/policy-layout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { sendContactEmail } from '@/lib/actions/contact'
 import { getContactInfo } from '@/lib/controllers/dynamic-pages'
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Github } from 'lucide-react'
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Github, CheckCircle, XCircle } from 'lucide-react'
 
 interface SocialLink {
   platform: string
@@ -59,40 +60,99 @@ const SocialIcon = ({ platform }: { platform: string }) => {
   }
 };
 
-export default async function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string; error?: string }>
+}) {
   const contactInfo = await getContacts()
+  const params = await searchParams
+  const success = params.success === 'true'
+  const error = params.error
+
+  const errorMessages: Record<string, string> = {
+    missing_fields: 'Please fill in all required fields.',
+    send_failed: 'Failed to send email. Please try again.',
+    unknown: 'An unexpected error occurred. Please try again.',
+  }
 
   return (
     <PolicyLayout title="Contact Us">
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-2xl font-semibold mb-4">{contactInfo.formTitle}</h2>
-          <p className="mb-4">{contactInfo.formDescription}</p>
-          <form className="space-y-4">
-            <Input placeholder="Your Name" className="bg-white/5 border-purple-700 focus:border-purple-500" />
-            <Input type="email" placeholder="Your Email" className="bg-white/5 border-purple-700 focus:border-purple-500" />
-            <Textarea placeholder="Your Message" className="bg-white/5 border-purple-700 focus:border-purple-500 min-h-[150px]" />
-            <Button type="submit" className="w-full bg-purple-700 hover:bg-purple-800">Send Message</Button>
+          <p className="mb-4 text-muted-foreground">{contactInfo.formDescription}</p>
+          
+          {success && (
+            <div className="mb-4 p-4 bg-green-500/10 border border-green-500/50 rounded-lg flex items-start gap-3">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <p className="text-green-500 text-sm">
+                Thank you for your message! We'll get back to you soon.
+              </p>
+            </div>
+          )}
+          
+          {error && (
+            <div className="mb-4 p-4 bg-destructive/10 border border-destructive/50 rounded-lg flex items-start gap-3">
+              <XCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+              <p className="text-destructive text-sm">
+                {errorMessages[error] || 'An error occurred. Please try again.'}
+              </p>
+            </div>
+          )}
+
+          <form className="space-y-4" action={sendContactEmail}>            
+            <Input
+              name="name"
+              placeholder="Your Name"
+              required
+              className="bg-background/60 border-border/60 focus-visible:ring-ring"
+            />
+            <Input
+              name="email"
+              type="email"
+              placeholder="Your Email"
+              required
+              className="bg-background/60 border-border/60 focus-visible:ring-ring"
+            />
+            <Input
+              name="company"
+              placeholder="Company (optional)"
+              className="bg-background/60 border-border/60 focus-visible:ring-ring"
+            />
+            {/* Honeypot field for bots */}
+            <input name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+            <Textarea
+              name="message"
+              placeholder="Your Message"
+              required
+              className="bg-background/60 border-border/60 focus-visible:ring-ring min-h-[150px]"
+            />
+            <Button type="submit" className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90">
+              Send Message
+            </Button>
           </form>
         </div>
+        
+        {/* Right Column (Contact Details) */}
         <div>
           <h2 className="text-2xl font-semibold mb-4">{contactInfo.title}</h2>
-          <SafeHTML html={contactInfo.description} />
-          <div className="space-y-4 mt-4">
-            <p><strong>Address:</strong> {contactInfo.address}</p>
-            <p><strong>Email:</strong> {contactInfo.email}</p>
-            <p><strong>Phone:</strong> {contactInfo.phone}</p>
+          <p className="text-foreground mb-4">{contactInfo.description}</p>
+          <div className="space-y-4 mt-4 text-muted-foreground">
+            <p><strong className="text-foreground">Address:</strong> {contactInfo.address}</p>
+            <p><strong className="text-foreground">Email:</strong> {contactInfo.email}</p>
+            <p><strong className="text-foreground">Phone:</strong> {contactInfo.phone}</p>
           </div>
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">{contactInfo.socialTitle}</h3>
             <div className="flex space-x-4">
               {contactInfo.socialLinks.map((link, index) => (
-                <a 
-                  key={index} 
-                  href={link.url} 
-                  target="_blank" 
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   <SocialIcon platform={link.platform} />
                 </a>

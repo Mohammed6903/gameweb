@@ -12,6 +12,9 @@ import { getPaginatedGames, deleteGame, getTotalGamesCount } from "@/lib/control
 import type { FetchedGameData } from "@/types/games"
 import { Pagination } from "@/components/pagination"
 import { toast, Toaster } from "sonner"
+import { useSearchParams } from "next/navigation"
+import Loading from "./loading"
+import { Suspense } from "react"
 
 export default function ManageGamesPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -62,132 +65,144 @@ export default function ManageGamesPage() {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-900 text-gray-100">
-      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 mb-6">
-        Manage Games
-      </h1>
-
-      {/* Search and Add Game Section */}
-      <div className="flex justify-between items-center mb-6 space-x-4">
-        <div className="flex-grow relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search games by title or status..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="pl-10 w-full bg-gray-800 border-gray-700 text-gray-100"
-          />
+    <div className="space-y-6 p-6 md:p-8 bg-background text-foreground">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-4xl font-bold text-foreground">Manage Games</h1>
+          <p className="text-muted-foreground mt-1">View, edit, and manage your game catalog</p>
         </div>
         <Link href="/admin/add-game">
-          <Button
-            variant="default"
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-          >
-            <Plus className="mr-2 h-4 w-4" /> Add New Game
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+            <Plus className="h-5 w-5" /> Add New Game
           </Button>
         </Link>
       </div>
 
-      {/* Games Table */}
-      <Card className="bg-gray-800 border-gray-700">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-100 flex items-center">
-            <Gamepad className="mr-2 h-5 w-5 text-purple-400" />
-            Game Catalog
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="text-center py-10 text-gray-300">Loading...</div>
-          ) : (
-            <>
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-gray-700">
-                    <TableHead className="text-gray-300">Thumbnail</TableHead>
-                    <TableHead className="text-gray-300">Title</TableHead>
-                    <TableHead className="text-gray-300">Status</TableHead>
-                    <TableHead className="text-right text-gray-300">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredGames.map((game) => (
-                    <TableRow key={game.id} className="border-gray-700">
-                      <TableCell>
-                        {game.thumbnail_url ? (
-                          <img
-                            src={game.thumbnail_url || "/placeholder.svg"}
-                            alt={`${game.name} thumbnail`}
-                            className="w-16 h-16 object-cover rounded"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 bg-gray-700 rounded flex items-center justify-center text-xs text-gray-400">
-                            No Image
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium text-gray-100">{game.name}</TableCell>
-                      <TableCell>
-                        <span
-                          className={`
-                            px-2 py-1 rounded text-xs font-semibold
-                            ${game.is_active ? "bg-green-800 text-green-100" : "bg-red-800 text-red-100"}
-                          `}
-                        >
-                          {game.is_active ? "active" : "inactive"}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Link href={`/admin/edit-game/${game.id}`}>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-8 px-2 bg-gray-700 text-gray-100 border-gray-600 hover:bg-gray-600"
-                            >
-                              <Edit className="mr-1 h-4 w-4" /> Edit
-                            </Button>
-                          </Link>
-                          <DeleteGameDialog
-                            gameId={game.id}
-                            gameTitle={game.name}
-                            onDelete={() => handleDeleteGame(game.id)}
-                          />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              {/* Pagination */}
-              <div className="mt-4 flex justify-center">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  baseUrl="/admin/manage-games"
-                  setCurrentPage={setCurrentPage}
+      {/* Search and Filter Section */}
+      <Card className="bg-card border-border">
+        <CardContent className="p-6">
+          <div className="flex gap-4 items-end">
+            <div className="flex-1">
+              <label className="text-sm font-medium text-foreground mb-2 block">Search Games</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  type="text"
+                  placeholder="Search by title or status..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="pl-10 bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
-            </>
-          )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Games Table */}
+      <Card className="bg-card border-border shadow-sm">
+        <CardHeader className="border-b border-border">
+          <CardTitle className="text-xl font-semibold text-foreground flex items-center gap-2">
+            <Gamepad className="h-5 w-5 text-primary" />
+            Game Catalog ({filteredGames.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Suspense fallback={<Loading />}>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-border bg-muted/30 hover:bg-muted/30">
+                      <TableHead className="text-foreground font-semibold">Thumbnail</TableHead>
+                      <TableHead className="text-foreground font-semibold">Title</TableHead>
+                      <TableHead className="text-foreground font-semibold">Status</TableHead>
+                      <TableHead className="text-right text-foreground font-semibold">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredGames.map((game) => (
+                      <TableRow key={game.id} className="border-border hover:bg-muted/50 transition-colors">
+                        <TableCell className="py-3">
+                          {game.thumbnail_url ? (
+                            <img
+                              src={game.thumbnail_url || "/placeholder.svg"}
+                              alt={`${game.name} thumbnail`}
+                              className="w-14 h-14 object-cover rounded-md border border-border"
+                            />
+                          ) : (
+                            <div className="w-14 h-14 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground">
+                              No Image
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell className="font-medium text-foreground">{game.name}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`
+                              px-3 py-1 rounded-full text-xs font-semibold
+                              ${game.is_active 
+                                ? "bg-green-500/15 text-green-600 dark:text-green-400" 
+                                : "bg-red-500/15 text-red-600 dark:text-red-400"
+                            }
+                          `}
+                          >
+                            {game.is_active ? "Active" : "Inactive"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            <Link href={`/admin/edit-game/${game.id}`}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-3 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                              >
+                                <Edit className="h-4 w-4 mr-1" /> Edit
+                              </Button>
+                            </Link>
+                            <DeleteGameDialog
+                              gameId={game.id}
+                              gameTitle={game.name}
+                              onDelete={() => handleDeleteGame(game.id)}
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
+                {/* Pagination */}
+                <div className="mt-4 flex justify-center">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    baseUrl="/admin/manage-games"
+                    setCurrentPage={setCurrentPage}
+                  />
+                </div>
+              </>
+            )}
+          </Suspense>
         </CardContent>
       </Card>
 
       {/* No Results Handling */}
       {!isLoading && filteredGames.length === 0 && (
-        <div className="text-center py-10 bg-gray-800 rounded-lg">
-          <p className="text-gray-300 mb-4">No games found</p>
-          <Link href="/admin/add-game">
-            <Button
-              variant="default"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add Your First Game
-            </Button>
-          </Link>
-        </div>
+        <Card className="bg-card border-border">
+          <CardContent className="text-center py-12">
+            <Gamepad className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+            <p className="text-muted-foreground mb-6">No games found</p>
+            <Link href="/admin/add-game">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+                <Plus className="h-4 w-4" /> Add Your First Game
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
       )}
       <Toaster position="bottom-right" />
     </div>

@@ -44,28 +44,29 @@ export default function AddGamePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-900 text-gray-100">
-      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 mb-6">
-        Game Management
-      </h1>
+    <div className="space-y-6 p-6 md:p-8 bg-background text-foreground">
+      <div>
+        <h1 className="text-4xl font-bold text-foreground">Game Management</h1>
+        <p className="text-muted-foreground mt-2">Add new games or create game providers</p>
+      </div>
       
-      <Card className="bg-gray-800 shadow-lg rounded-lg border-gray-700">
+      <Card className="bg-card border-border shadow-sm">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-700">
+          <TabsList className="grid w-full grid-cols-2 bg-muted m-6 mb-0 p-1 h-auto">
             <TabsTrigger 
               value="add-game"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-gray-100"
+              className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm transition-all rounded-md"
             >
               Add New Game
             </TabsTrigger>
             <TabsTrigger 
               value="add-provider"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-gray-100"
+              className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm transition-all rounded-md"
             >
               Create New Provider
             </TabsTrigger>
           </TabsList>
-          <CardContent className="p-6">
+          <CardContent className="p-6 border-t border-border">
             <TabsContent value="add-game">  
               <CreateGameForm providers={providers} categories={categories} tags={tags} />
             </TabsContent>

@@ -22,8 +22,8 @@ export const ChartCard = memo(
     height: number
     type: "line" | "donut"
   }) => {
-    // Merge the provided options with dark theme options
-    const darkThemeOptions: ApexOptions = {
+    // Merge the provided options with theme options
+    const themeOptions: ApexOptions = {
       ...options,
       theme: {
         mode: "dark",
@@ -34,24 +34,24 @@ export const ChartCard = memo(
       },
       grid: {
         ...options.grid,
-        borderColor: "#374151", // border-gray-700
+        borderColor: "var(--color-border)",
       },
       legend: {
         ...options.legend,
         labels: {
           ...options.legend?.labels,
-          colors: "#e5e7eb", // text-gray-200
+          colors: "var(--color-foreground)",
         },
       },
     }
 
     return (
-      <Card className="bg-gray-800 border-gray-700">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-100">{title}</CardTitle>
+      <Card className="bg-card border-border shadow-sm">
+        <CardHeader className="border-b border-border">
+          <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Chart options={darkThemeOptions} series={series} type={type} height={300} />
+        <CardContent className="pt-6">
+          <Chart options={themeOptions} series={series} type={type} height={300} />
         </CardContent>
       </Card>
     )

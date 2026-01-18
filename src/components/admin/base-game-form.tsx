@@ -137,297 +137,21 @@ export function BaseGameForm({ initialData, providers = [], categories = [], tag
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 pb-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Game Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter game title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter game description" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="play_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Game URL</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/game" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Game Status</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select game status" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className='bg-black'>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="categories"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categories</FormLabel>
-              <FormControl>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {field.value.map((category) => (
-                    <Badge key={category} variant="secondary" className="text-sm py-1 px-2">
-                      {category}
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="ml-1 h-auto p-0 text-muted-foreground hover:text-foreground"
-                        onClick={() => {
-                          const updatedCategories = field.value.filter((c) => c !== category);
-                          form.setValue("categories", updatedCategories);
-                        }}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </Badge>
-                  ))}
-                </div>
-              </FormControl>
-              <Popover open={openCategory} onOpenChange={setOpenCategory}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openCategory}
-                    className="w-full justify-between"
-                  >
-                    Select categories
-                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search categories..." onValueChange={setCustomCategory} />
-                    <CommandList className='bg-black'>
-                      <CommandEmpty>
-                        <h1>
-                          No category found.
-                        </h1>
-                        <Button
-                          type="button"
-                          size="sm"
-                          className="mt-2"
-                          onClick={() => handleAddCustomItem("categories", customCategory)}
-                        >
-                          <Plus className="mr-2 h-4 w-4" /> Add "{customCategory}"
-                        </Button>
-                      </CommandEmpty>
-                      <CommandGroup>
-                        <ScrollArea className="max-h-32 overflow-auto hide-scrollbar">
-                          {categories.map((category: string) => (
-                            <CommandItem
-                              key={category}
-                              onSelect={() => {
-                                if (!field.value.includes(category)) {
-                                  form.setValue("categories", [...field.value, category]);
-                                }
-                                setOpenCategory(false);
-                              }}
-                            >
-                              {category}
-                            </CommandItem>
-                          ))}
-                        </ScrollArea>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="tags"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tags</FormLabel>
-              <FormControl>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {field.value && field.value.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-sm py-1 px-2">
-                      {tag}
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="ml-1 h-auto p-0 text-muted-foreground hover:text-foreground"
-                        onClick={() => {
-                          const updatedTags = field.value && field.value.filter((t) => t !== tag);
-                          form.setValue("tags", updatedTags);
-                        }}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </Badge>
-                  ))}
-                </div>
-              </FormControl>
-              <Popover open={openTag} onOpenChange={setOpenTag}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openTag}
-                    className="w-full justify-between"
-                  >
-                    Select Tags
-                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search tags..." onValueChange={setCustomTag} />
-                    <CommandList className='bg-black'>
-                      <CommandEmpty>
-                        <h1>
-                          No such tag found.
-                        </h1>
-                        <Button
-                          type="button"
-                          size="sm"
-                          className="mt-2"
-                          onClick={() => handleAddCustomItem("tags", customTag)}
-                        >
-                          <Plus className="mr-2 h-4 w-4" /> Add "{customTag}"
-                        </Button>
-                      </CommandEmpty>
-                      <CommandGroup>
-                        <ScrollArea className="max-h-32 overflow-auto hide-scrollbar">
-                          {tags.map((tag: string) => (
-                            <CommandItem
-                              key={tag}
-                              onSelect={() => {
-                                if (field.value && !field.value.includes(tag)) {
-                                  form.setValue("tags", [...field.value, tag]);
-                                }
-                                setOpenTag(false);
-                              }}
-                            >
-                              {tag}
-                            </CommandItem>
-                          ))}
-                        </ScrollArea>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="provider_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Provider</FormLabel>
-              <Popover open={openProvider} onOpenChange={setOpenProvider}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openProvider}
-                    className="w-full justify-between"
-                  >
-                    {field.value
-                      ? providers.find((provider) => provider.id === field.value)?.name
-                      : "Select provider"}
-                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandList className='bg-black'>
-                      <CommandInput placeholder="Search providers..." />
-                      <CommandEmpty>No provider found.</CommandEmpty>
-                      <CommandGroup>
-                        <ScrollArea className="max-h-32 overflow-auto hide-scrollbar">
-                          {providers.map((provider) => (
-                            <CommandItem
-                              key={provider.id}
-                              onSelect={() => {
-                                form.setValue("provider_id", provider.id);
-                                setOpenProvider(false);
-                              }}
-                            >
-                              {provider.name}
-                            </CommandItem>
-                          ))}
-                        </ScrollArea>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 pb-4">
+        {/* Basic Information Section */}
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Basic Information</h3>
+          </div>
+          
           <FormField
             control={form.control}
-            name="thumbnailFile"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Thumbnail File</FormLabel>
+                <FormLabel className="text-sm font-medium text-foreground">Game Title</FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleThumbnailChange}
-                  />
+                  <Input placeholder="Enter game title" {...field} className="bg-muted border-border text-foreground placeholder:text-muted-foreground" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -436,38 +160,350 @@ export function BaseGameForm({ initialData, providers = [], categories = [], tag
 
           <FormField
             control={form.control}
-            name="thumbnail_url"
+            name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Thumbnail URL</FormLabel>
+                <FormLabel className="text-sm font-medium text-foreground">Description</FormLabel>
                 <FormControl>
-                  <Input
-                    type="url"
-                    placeholder="https://example.com/image.jpg"
-                    {...field}
-                    onChange={handleThumbnailUrlChange}
-                  />
+                  <Textarea placeholder="Enter game description" {...field} className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[100px]" />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="play_url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Game URL</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com/game" {...field} className="bg-muted border-border text-foreground placeholder:text-muted-foreground" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+        </div>
+
+        {/* Game Configuration Section */}
+        <div className="space-y-4 border-t border-border pt-6">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Configuration</h3>
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Game Status</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="bg-muted border-border text-foreground">
+                      <SelectValue placeholder="Select game status" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className='bg-card border-border'>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="provider_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Provider</FormLabel>
+                <Popover open={openProvider} onOpenChange={setOpenProvider}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openProvider}
+                      className="w-full justify-between bg-muted border-border text-foreground hover:bg-muted/80"
+                    >
+                      {field.value
+                        ? providers.find((provider) => provider.id === field.value)?.name
+                        : "Select provider"}
+                      <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandList className='bg-card'>
+                        <CommandInput placeholder="Search providers..." className="border-border" />
+                        <CommandEmpty>No provider found.</CommandEmpty>
+                        <CommandGroup>
+                          <ScrollArea className="max-h-32 overflow-auto hide-scrollbar">
+                            {providers.map((provider) => (
+                              <CommandItem
+                                key={provider.id}
+                                onSelect={() => {
+                                  form.setValue("provider_id", provider.id);
+                                  setOpenProvider(false);
+                                }}
+                              >
+                                {provider.name}
+                              </CommandItem>
+                            ))}
+                          </ScrollArea>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
 
-        {thumbnailPreview && (
-          <div className="mt-4">
-            <FormLabel>Thumbnail Preview</FormLabel>
-            <img
-              src={thumbnailPreview}
-              alt="Thumbnail Preview"
-              className="mt-2 max-w-[200px] rounded"
+        {/* Categories & Tags Section */}
+        <div className="space-y-4 border-t border-border pt-6">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Organization</h3>
+          </div>
+          
+          <FormField
+            control={form.control}
+            name="categories"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Categories</FormLabel>
+                <FormControl>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {field.value.map((category) => (
+                      <Badge key={category} variant="secondary" className="text-sm py-1 px-2">
+                        {category}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="ml-1 h-auto p-0 text-muted-foreground hover:text-foreground"
+                          onClick={() => {
+                            const updatedCategories = field.value.filter((c) => c !== category);
+                            form.setValue("categories", updatedCategories);
+                          }}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
+                  </div>
+                </FormControl>
+                <Popover open={openCategory} onOpenChange={setOpenCategory}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openCategory}
+                    className="w-full justify-between bg-muted border-border text-foreground hover:bg-muted/80"
+                  >
+                    {field.value.length > 0 ? `${field.value.length} selected` : 'Select categories'}
+                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search categories..." onValueChange={setCustomCategory} className="border-border" />
+                    <CommandList className='bg-card'>
+                        <CommandEmpty>
+                          <h1>
+                            No category found.
+                          </h1>
+                          <Button
+                            type="button"
+                            size="sm"
+                            className="mt-2"
+                            onClick={() => handleAddCustomItem("categories", customCategory)}
+                          >
+                            <Plus className="mr-2 h-4 w-4" /> Add "{customCategory}"
+                          </Button>
+                        </CommandEmpty>
+                        <CommandGroup>
+                          <ScrollArea className="max-h-32 overflow-auto hide-scrollbar">
+                            {categories.map((category: string) => (
+                              <CommandItem
+                                key={category}
+                                onSelect={() => {
+                                  if (!field.value.includes(category)) {
+                                    form.setValue("categories", [...field.value, category]);
+                                  }
+                                  setOpenCategory(false);
+                                }}
+                              >
+                                {category}
+                              </CommandItem>
+                            ))}
+                          </ScrollArea>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-foreground">Tags</FormLabel>
+                <FormControl>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {field.value && field.value.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-sm py-1 px-2">
+                        {tag}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="ml-1 h-auto p-0 text-muted-foreground hover:text-foreground"
+                          onClick={() => {
+                            const updatedTags = field.value && field.value.filter((t) => t !== tag);
+                            form.setValue("tags", updatedTags);
+                          }}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </Badge>
+                    ))}
+                  </div>
+                </FormControl>
+              <Popover open={openTag} onOpenChange={setOpenTag}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openTag}
+                    className="w-full justify-between bg-muted border-border text-foreground hover:bg-muted/80"
+                  >
+                    {field.value && field.value.length > 0 ? `${field.value.length} selected` : 'Select tags'}
+                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search tags..." onValueChange={setCustomTag} className="border-border" />
+                    <CommandList className='bg-card'>
+                        <CommandEmpty>
+                          <h1>
+                            No such tag found.
+                          </h1>
+                          <Button
+                            type="button"
+                            size="sm"
+                            className="mt-2"
+                            onClick={() => handleAddCustomItem("tags", customTag)}
+                          >
+                            <Plus className="mr-2 h-4 w-4" /> Add "{customTag}"
+                          </Button>
+                        </CommandEmpty>
+                        <CommandGroup>
+                          <ScrollArea className="max-h-32 overflow-auto hide-scrollbar">
+                            {tags.map((tag: string) => (
+                              <CommandItem
+                                key={tag}
+                                onSelect={() => {
+                                  if (field.value && !field.value.includes(tag)) {
+                                    form.setValue("tags", [...field.value, tag]);
+                                  }
+                                  setOpenTag(false);
+                                }}
+                              >
+                                {tag}
+                              </CommandItem>
+                            ))}
+                          </ScrollArea>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+              </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Media Section */}
+        <div className="space-y-4 border-t border-border pt-6">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Media</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="thumbnailFile"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-foreground">Thumbnail File</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbnailChange}
+                      className="bg-muted border-border text-foreground cursor-pointer"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="thumbnail_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-foreground">Thumbnail URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="url"
+                      placeholder="https://example.com/image.jpg"
+                      {...field}
+                      onChange={handleThumbnailUrlChange}
+                      className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-        )}
 
-        <Button type="submit">
-          {submitButtonText}
-        </Button>
+          {thumbnailPreview && (
+            <div className="bg-muted rounded-lg p-4">
+              <FormLabel className="text-sm font-medium text-foreground block mb-3">Thumbnail Preview</FormLabel>
+              <img
+                src={thumbnailPreview || "/placeholder.svg"}
+                alt="Thumbnail Preview"
+                className="max-w-[200px] rounded-lg border border-border"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-3 justify-end border-t border-border pt-6">
+          <Button variant="outline" className="border-border text-foreground hover:bg-muted bg-transparent" type="button">
+            Cancel
+          </Button>
+          <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            {submitButtonText}
+          </Button>
+        </div>
       </form>
     </Form>
   );
