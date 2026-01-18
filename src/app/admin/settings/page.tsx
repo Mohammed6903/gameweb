@@ -343,19 +343,20 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-gray-900 to-purple-900 min-h-screen text-white">
-      <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 mb-6">
-        Settings
-      </h1>
+    <div className="space-y-8 p-6 md:p-8 bg-background text-foreground min-h-screen">
+      <div>
+        <h1 className="text-4xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground mt-2">Configure your site, manage users, and set up scripts</p>
+      </div>
 
       {/* General Settings */}
-      <Card className="bg-gray-800 border border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-white">General Settings</CardTitle>
+      <Card className="bg-card border border-border shadow-sm">
+        <CardHeader className="border-b border-border">
+          <CardTitle className="text-xl font-semibold text-foreground">General Settings</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="site-title" className="text-white">
+        <CardContent className="space-y-6 pt-6">
+          <div className="space-y-2">
+            <Label htmlFor="site-title" className="text-sm font-medium text-foreground">
               Site Name
             </Label>
             <Input
@@ -363,11 +364,11 @@ export default function SettingsPage() {
               value={siteTitle}
               onChange={(e) => setSiteTitle(e.target.value)}
               placeholder="Enter your site name"
-              className="bg-gray-700 border-gray-600 text-white"
+              className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
             />
           </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="site-description" className="text-white">
+          <div className="space-y-2">
+            <Label htmlFor="site-description" className="text-sm font-medium text-foreground">
               Site Description
             </Label>
             <Textarea
@@ -377,117 +378,116 @@ export default function SettingsPage() {
                 setSiteDescription(e.target.value)
               }}
               placeholder="Enter your site description"
-              className="bg-gray-700 border-gray-600 text-white"
+              className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[100px]"
             />
           </div>
-          <Button
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
-            onClick={async () => {
-              await saveSiteMeta()
-              setIsMetadataModified(true)
-            }}
-          >
-            Save Changes
-          </Button>
+          <div className="flex gap-3 justify-end pt-4 border-t border-border">
+            <Button
+              variant="outline"
+              className="border-border text-foreground hover:bg-muted bg-transparent"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={async () => {
+                await saveSiteMeta()
+                setIsMetadataModified(true)
+              }}
+            >
+              Save Changes
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
       {/* Favicon Settings */}
-      <Card className="bg-gray-800 border border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-white">Favicon Settings</CardTitle>
+      <Card className="bg-card border border-border shadow-sm">
+        <CardHeader className="border-b border-border">
+          <CardTitle className="text-xl font-semibold text-foreground">Favicon Settings</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="favicon" className="text-white">Favicon (ICO)</Label>
-            <Input
-              id="favicon"
-              type="file"
-              accept=".ico"
-              onChange={(e) => handleFaviconUpload(e, 'favicon')}
-              className="border-white"
-            />
-            {faviconUrls.favicon && <img src={faviconUrls.favicon} alt="Favicon" className="w-8 h-8" />}
-          </div>
-          {/* <div className="flex flex-col space-y-2">
-            <Label htmlFor="favicon-svg" className="text-white">Favicon (SVG)</Label>
-            <Input
-              id="favicon-svg"
-              type="file"
-              accept=".svg"
-              onChange={(e) => handleFaviconUpload(e, 'svg')}
-              className="border-gray-300"
-            />
-            {faviconUrls.svg && <img src={faviconUrls.svg} alt="Favicon SVG" className="w-8 h-8" />}
-          </div> */}
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="favicon-16" className="text-white">Favicon 16x16 (PNG)</Label>
-            <Input
-              id="favicon-16"
-              type="file"
-              accept=".png"
-              onChange={(e) => handleFaviconUpload(e, 'favicon16')}
-              className="border-gray-300"
-            />
-            {faviconUrls.favicon16 && <img src={faviconUrls.favicon16} alt="Favicon 16x16" className="w-4 h-4" />}
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="favicon-32" className="text-white">Favicon 32x32 (PNG)</Label>
-            <Input
-              id="favicon-32"
-              type="file"
-              accept=".png"
-              onChange={(e) => handleFaviconUpload(e, 'favicon32')}
-              className="border-gray-300"
-            />
-            {faviconUrls.favicon32 && <img src={faviconUrls.favicon32} alt="Favicon 32x32" className="w-8 h-8" />}
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="android-chrome-192" className="text-white">Android Chrome 192x192 (PNG)</Label>
-            <Input
-              id="android-chrome-192"
-              type="file"
-              accept=".png"
-              onChange={(e) => handleFaviconUpload(e, 'androidChrome192')}
-              className="border-gray-300"
-            />
-            {faviconUrls.androidChrome192 && <img src={faviconUrls.androidChrome192} alt="Android Chrome 192x192" className="w-12 h-12" />}
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="android-chrome-512" className="text-white">Android Chrome 512x512 (PNG)</Label>
-            <Input
-              id="android-chrome-512"
-              type="file"
-              accept=".png"
-              onChange={(e) => handleFaviconUpload(e, 'androidChrome512')}
-              className="border-gray-300"
-            />
-            {faviconUrls.androidChrome512 && <img src={faviconUrls.androidChrome512} alt="Android Chrome 512x512" className="w-16 h-16" />}
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="apple-touch-icon" className="text-white">Apple Touch Icon (PNG)</Label>
-            <Input
-              id="apple-touch-icon"
-              type="file"
-              accept=".png"
-              onChange={(e) => handleFaviconUpload(e, 'appleTouchIcon')}
-              className="border-gray-300"
-            />
-            {faviconUrls.appleTouchIcon && <img src={faviconUrls.appleTouchIcon} alt="Apple Touch Icon" className="w-16 h-16" />}
+        <CardContent className="space-y-6 pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="favicon" className="text-sm font-medium text-foreground">Favicon (ICO)</Label>
+              <Input
+                id="favicon"
+                type="file"
+                accept=".ico"
+                onChange={(e) => handleFaviconUpload(e, 'favicon')}
+                className="bg-muted border-border text-foreground cursor-pointer"
+              />
+              {faviconUrls.favicon && <img src={faviconUrls.favicon || "/placeholder.svg"} alt="Favicon" className="w-8 h-8 rounded border border-border p-1" />}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="favicon-16" className="text-sm font-medium text-foreground">Favicon 16x16 (PNG)</Label>
+              <Input
+                id="favicon-16"
+                type="file"
+                accept=".png"
+                onChange={(e) => handleFaviconUpload(e, 'favicon16')}
+                className="bg-muted border-border text-foreground cursor-pointer"
+              />
+              {faviconUrls.favicon16 && <img src={faviconUrls.favicon16 || "/placeholder.svg"} alt="Favicon 16x16" className="w-6 h-6 rounded border border-border p-1" />}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="favicon-32" className="text-sm font-medium text-foreground">Favicon 32x32 (PNG)</Label>
+              <Input
+                id="favicon-32"
+                type="file"
+                accept=".png"
+                onChange={(e) => handleFaviconUpload(e, 'favicon32')}
+                className="bg-muted border-border text-foreground cursor-pointer"
+              />
+              {faviconUrls.favicon32 && <img src={faviconUrls.favicon32 || "/placeholder.svg"} alt="Favicon 32x32" className="w-8 h-8 rounded border border-border p-1" />}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="android-chrome-192" className="text-sm font-medium text-foreground">Android Chrome 192x192 (PNG)</Label>
+              <Input
+                id="android-chrome-192"
+                type="file"
+                accept=".png"
+                onChange={(e) => handleFaviconUpload(e, 'androidChrome192')}
+                className="bg-muted border-border text-foreground cursor-pointer"
+              />
+              {faviconUrls.androidChrome192 && <img src={faviconUrls.androidChrome192 || "/placeholder.svg"} alt="Android Chrome 192x192" className="w-12 h-12 rounded border border-border p-1" />}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="android-chrome-512" className="text-sm font-medium text-foreground">Android Chrome 512x512 (PNG)</Label>
+              <Input
+                id="android-chrome-512"
+                type="file"
+                accept=".png"
+                onChange={(e) => handleFaviconUpload(e, 'androidChrome512')}
+                className="bg-muted border-border text-foreground cursor-pointer"
+              />
+              {faviconUrls.androidChrome512 && <img src={faviconUrls.androidChrome512 || "/placeholder.svg"} alt="Android Chrome 512x512" className="w-16 h-16 rounded border border-border p-1" />}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="apple-touch-icon" className="text-sm font-medium text-foreground">Apple Touch Icon (PNG)</Label>
+              <Input
+                id="apple-touch-icon"
+                type="file"
+                accept=".png"
+                onChange={(e) => handleFaviconUpload(e, 'appleTouchIcon')}
+                className="bg-muted border-border text-foreground cursor-pointer"
+              />
+              {faviconUrls.appleTouchIcon && <img src={faviconUrls.appleTouchIcon || "/placeholder.svg"} alt="Apple Touch Icon" className="w-16 h-16 rounded border border-border p-1" />}
+            </div>
           </div>
         </CardContent>
       </Card>
       {/* User Management */}
-      <Card className="bg-gray-800 border border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader
-          className="cursor-pointer flex flex-row items-center justify-between"
+          className="cursor-pointer flex flex-row items-center justify-between border-b border-border hover:bg-muted/30 transition-colors"
           onClick={() => setShowUserList(!showUserList)}
         >
-          <CardTitle className="text-xl font-semibold text-white">User Management</CardTitle>
-          {showUserList ? <ChevronUp className="text-white" /> : <ChevronDown className="text-white" />}
+          <CardTitle className="text-xl font-semibold text-foreground">User Management</CardTitle>
+          {showUserList ? <ChevronUp className="text-muted-foreground" /> : <ChevronDown className="text-muted-foreground" />}
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-white">Manage users and their access levels.</p>
+        <CardContent className="space-y-4 pt-6">
+          <p className="text-muted-foreground text-sm">Manage users and their access levels.</p>
           {showUserList && (
             <UserList
               users={users}
@@ -502,314 +502,334 @@ export default function SettingsPage() {
       </Card>
 
       {/* Header Script Management */}
-      <Card className="bg-gray-800 border border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader
-          className="cursor-pointer flex flex-row items-center justify-between"
+          className="cursor-pointer flex flex-row items-center justify-between border-b border-border hover:bg-muted/30 transition-colors"
           onClick={() => setShowHeaderScripts(!showHeaderScripts)}
         >
-          <CardTitle className="text-xl font-semibold text-white">Header Script Management</CardTitle>
-          {showHeaderScripts ? <ChevronUp className="text-white" /> : <ChevronDown className="text-white" />}
+          <CardTitle className="text-xl font-semibold text-foreground">Header Script Management</CardTitle>
+          {showHeaderScripts ? <ChevronUp className="text-muted-foreground" /> : <ChevronDown className="text-muted-foreground" />}
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6 pt-6">
           {showHeaderScripts && (
             <>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="header-script-name" className="text-white">Script Name</Label>
+              <div className="space-y-2">
+                <Label htmlFor="header-script-name" className="text-sm font-medium text-foreground">Script Name</Label>
                 <Input
                   id="header-script-name"
                   value={newHeaderScript.name}
                   onChange={(e) => setNewHeaderScript({...newHeaderScript, name: e.target.value})}
                   placeholder="Enter a name for this header script"
-                  className="border-gray-300"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="header-script-content" className="text-white">Script Content</Label>
+              <div className="space-y-2">
+                <Label htmlFor="header-script-content" className="text-sm font-medium text-foreground">Script Content</Label>
                 <Textarea
                   id="header-script-content"
                   value={newHeaderScript.script}
                   onChange={(e) => setNewHeaderScript({...newHeaderScript, script: e.target.value})}
                   placeholder="Enter the header content like meta tags or scripts."
-                  className="border-gray-300 min-h-[150px]"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[120px]"
                 />
               </div>
-              <Button
-                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
-                onClick={createHeaderScript}
-              >
-                Add Header Script
-              </Button>
-
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4">Saved Header Scripts</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {headerScripts.map((script) => (
-                      <TableRow key={script.id}>
-                        <TableCell>{script.name}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="outline" size="sm" onClick={() => setEditingHeaderScript(script)}>
-                                  <Pencil className="h-4 w-4 mr-2"/>
-                                  Edit
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="sm:max-w-[425px]">
-                                <DialogHeader>
-                                  <DialogTitle>Edit Header Script</DialogTitle>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="edit-header-name" className="text-right">
-                                      Name
-                                    </Label>
-                                    <Input
-                                      id="edit-header-name"
-                                      value={editingHeaderScript?.name || ''}
-                                      onChange={(e) => setEditingHeaderScript(prev => prev ? {...prev, name: e.target.value} : null)}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="edit-header-content" className="text-right">
-                                      Content
-                                    </Label>
-                                    <Textarea
-                                      id="edit-header-content"
-                                      value={editingHeaderScript?.script || ''}
-                                      onChange={(e) => setEditingHeaderScript(prev => prev ? {...prev, script: e.target.value} : null)}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="flex justify-end space-x-2">
-                                  <Button onClick={() => editingHeaderScript && updateHeaderScript(editingHeaderScript)}>
-                                    Save Changes
-                                  </Button>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => deleteHeaderScript(script.id)}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="flex gap-3">
+                <Button
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  onClick={createHeaderScript}
+                >
+                  Add Header Script
+                </Button>
               </div>
+
+              {headerScripts.length > 0 && (
+                <div className="pt-6 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-4">Saved Header Scripts ({headerScripts.length})</h3>
+                  <div className="rounded-lg border border-border overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted hover:bg-muted border-b border-border">
+                          <TableHead className="text-foreground font-semibold">Name</TableHead>
+                          <TableHead className="text-foreground font-semibold">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {headerScripts.map((script) => (
+                          <TableRow key={script.id} className="hover:bg-muted/50 border-b border-border transition-colors">
+                            <TableCell className="text-foreground">{script.name}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary hover:bg-primary/10" onClick={() => setEditingHeaderScript(script)}>
+                                      <Pencil className="h-4 w-4 mr-1"/>
+                                      Edit
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[500px] bg-card border-border">
+                                    <DialogHeader>
+                                      <DialogTitle className="text-foreground">Edit Header Script</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="space-y-4 py-4">
+                                      <div className="space-y-2">
+                                        <Label htmlFor="edit-header-name" className="text-sm font-medium text-foreground">
+                                          Name
+                                        </Label>
+                                        <Input
+                                          id="edit-header-name"
+                                          value={editingHeaderScript?.name || ''}
+                                          onChange={(e) => setEditingHeaderScript(prev => prev ? {...prev, name: e.target.value} : null)}
+                                          className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <Label htmlFor="edit-header-content" className="text-sm font-medium text-foreground">
+                                          Content
+                                        </Label>
+                                        <Textarea
+                                          id="edit-header-content"
+                                          value={editingHeaderScript?.script || ''}
+                                          onChange={(e) => setEditingHeaderScript(prev => prev ? {...prev, script: e.target.value} : null)}
+                                          className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[120px]"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="flex justify-end gap-3">
+                                      <Button variant="outline" className="border-border text-foreground hover:bg-muted bg-transparent">
+                                        Cancel
+                                      </Button>
+                                      <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => editingHeaderScript && updateHeaderScript(editingHeaderScript)}>
+                                        Save Changes
+                                      </Button>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                  onClick={() => deleteHeaderScript(script.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 mr-1" />
+                                  Delete
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </CardContent>
       </Card>
 
-      {/* AdSense Script Management */}
-      <Card className="bg-gray-800 border border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      {/* Body Script Management */}
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader
-          className="cursor-pointer flex flex-row items-center justify-between"
+          className="cursor-pointer flex flex-row items-center justify-between border-b border-border hover:bg-muted/30 transition-colors"
           onClick={() => setShowAdSenseSettings(!showAdSenseSettings)}
         >
-          <CardTitle className="text-xl font-semibold text-white">Body Script Management</CardTitle>
-          {showAdSenseSettings ? <ChevronUp className="text-white" /> : <ChevronDown className="text-white" />}
+          <CardTitle className="text-xl font-semibold text-foreground">Body Script Management</CardTitle>
+          {showAdSenseSettings ? <ChevronUp className="text-muted-foreground" /> : <ChevronDown className="text-muted-foreground" />}
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6 pt-6">
           {showAdSenseSettings && (
             <>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="adsense-name" className="text-white">Script Name</Label>
+              <div className="space-y-2">
+                <Label htmlFor="adsense-name" className="text-sm font-medium text-foreground">Script Name</Label>
                 <Input
                   id="adsense-name"
                   value={adSenseScriptName}
                   onChange={(e) => setAdSenseScriptName(e.target.value)}
                   placeholder="Enter a name for this script"
-                  className="border-gray-300"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="adsense-target" className="text-white">Target Element</Label>
+              <div className="space-y-2">
+                <Label htmlFor="adsense-target" className="text-sm font-medium text-foreground">Target Element</Label>
                 <Input
                   id="adsense-target"
                   value={adSenseTargetElement}
                   onChange={(e) => setAdSenseTargetElement(e.target.value)}
-                  placeholder="Enter target element (e.g., <div>, <h1>)"
-                  className="border-gray-300"
+                  placeholder="Enter target element (e.g., div, h1)"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="adsense-position" className="text-white">Injection Position</Label>
+              <div className="space-y-2">
+                <Label htmlFor="adsense-position" className="text-sm font-medium text-foreground">Injection Position</Label>
                 <Select
                   value={adSenseInjectionPosition}
                   onValueChange={(value) => setAdSenseInjectionPosition(value)}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="bg-muted border-border text-foreground">
                     <SelectValue placeholder="Select injection position" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="bg-card border-border">
                     <SelectItem value="before">Before</SelectItem>
                     <SelectItem value="after">After</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="adsense-script" className="text-white">AdSense Script</Label>
+              <div className="space-y-2">
+                <Label htmlFor="adsense-script" className="text-sm font-medium text-foreground">Script Content</Label>
                 <Textarea
                   id="adsense-script"
                   value={adSenseScript}
                   onChange={(e) => setAdSenseScript(e.target.value)}
                   placeholder="Paste your script here. Be sure to verify that your script is secure and its syntax is correct as it can be harmful to your website."
-                  className="border-gray-300 min-h-[150px]"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[120px]"
                 />
               </div>
-              <Button
-                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
-                onClick={saveAdSenseScript}
-              >
-                Save AdSense Script
-              </Button>
-
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4">Saved Scripts</h3>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Target Element</TableHead>
-                      <TableHead>Position</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {savedScripts.map((script) => (
-                      <TableRow key={script.id}>
-                        <TableCell>{script.name}</TableCell>
-                        <TableCell>{script.element}</TableCell>
-                        <TableCell>{script.position}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="outline" size="sm" onClick={() => setEditingScript(script)}>
-                                  <Pencil className="h-4 w-4 mr-2" />
-                                  Edit
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="sm:max-w-[425px]">
-                                <DialogHeader>
-                                  <DialogTitle>Edit Script</DialogTitle>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="edit-name" className="text-right">
-                                      Name
-                                    </Label>
-                                    <Input
-                                      id="edit-name"
-                                      value={editingScript?.name || ''}
-                                      onChange={(e) => editingScript ? setEditingScript({...editingScript, name: e.target.value}) : setEditingScript({...script, name: e.target.value})}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="edit-element" className="text-right">
-                                      Element
-                                    </Label>
-                                    <Input
-                                      id="edit-element"
-                                      value={editingScript?.element}
-                                      onChange={(e) => editingScript ? setEditingScript({...editingScript, element: e.target.value}) : setEditingScript({...script, element: e.target.value})}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="edit-position" className="text-right">
-                                      Position
-                                    </Label>
-                                    <Select
-                                      value={editingScript?.position}
-                                      onValueChange={(value) => editingScript ? setEditingScript({...editingScript, position: value}) : setEditingScript({...script, position: value})}
-                                    >
-                                      <SelectTrigger className="col-span-3">
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent className="bg-white">
-                                        <SelectItem value="before">Before</SelectItem>
-                                        <SelectItem value="after">After</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="edit-script" className="text-right">
-                                      Script
-                                    </Label>
-                                    <Textarea
-                                      id="edit-script"
-                                      value={editingScript?.script}
-                                      onChange={(e) => editingScript ? setEditingScript({...editingScript, script: e.target.value}) : setEditingScript({...script, script: e.target.value})}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="flex justify-end space-x-2">
-                                  <Button onClick={() => updateSavedScript(editingScript ?? script)}>
-                                    Save Changes
-                                  </Button>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => deleteSavedScript(script.id)}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="flex gap-3">
+                <Button
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  onClick={saveAdSenseScript}
+                >
+                  Save Script
+                </Button>
               </div>
+
+              {savedScripts.length > 0 && (
+                <div className="pt-6 border-t border-border">
+                  <h3 className="text-sm font-semibold text-foreground mb-4">Saved Scripts ({savedScripts.length})</h3>
+                  <div className="rounded-lg border border-border overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted hover:bg-muted border-b border-border">
+                          <TableHead className="text-foreground font-semibold">Name</TableHead>
+                          <TableHead className="text-foreground font-semibold">Target Element</TableHead>
+                          <TableHead className="text-foreground font-semibold">Position</TableHead>
+                          <TableHead className="text-foreground font-semibold">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {savedScripts.map((script) => (
+                          <TableRow key={script.id} className="hover:bg-muted/50 border-b border-border transition-colors">
+                            <TableCell className="text-foreground">{script.name}</TableCell>
+                            <TableCell className="text-foreground">{script.element}</TableCell>
+                            <TableCell className="text-foreground">{script.position}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary hover:bg-primary/10" onClick={() => setEditingScript(script)}>
+                                      <Pencil className="h-4 w-4 mr-1" />
+                                      Edit
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[500px] bg-card border-border">
+                                    <DialogHeader>
+                                      <DialogTitle className="text-foreground">Edit Script</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="space-y-4 py-4">
+                                      <div className="space-y-2">
+                                        <Label htmlFor="edit-name" className="text-sm font-medium text-foreground">
+                                          Name
+                                        </Label>
+                                        <Input
+                                          id="edit-name"
+                                          value={editingScript?.name || ''}
+                                          onChange={(e) => editingScript ? setEditingScript({...editingScript, name: e.target.value}) : setEditingScript({...script, name: e.target.value})}
+                                          className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <Label htmlFor="edit-element" className="text-sm font-medium text-foreground">
+                                          Target Element
+                                        </Label>
+                                        <Input
+                                          id="edit-element"
+                                          value={editingScript?.element}
+                                          onChange={(e) => editingScript ? setEditingScript({...editingScript, element: e.target.value}) : setEditingScript({...script, element: e.target.value})}
+                                          className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <Label htmlFor="edit-position" className="text-sm font-medium text-foreground">
+                                          Position
+                                        </Label>
+                                        <Select
+                                          value={editingScript?.position}
+                                          onValueChange={(value) => editingScript ? setEditingScript({...editingScript, position: value}) : setEditingScript({...script, position: value})}
+                                        >
+                                          <SelectTrigger className="bg-muted border-border text-foreground">
+                                            <SelectValue />
+                                          </SelectTrigger>
+                                          <SelectContent className="bg-card border-border">
+                                            <SelectItem value="before">Before</SelectItem>
+                                            <SelectItem value="after">After</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                      <div className="space-y-2">
+                                        <Label htmlFor="edit-script" className="text-sm font-medium text-foreground">
+                                          Script Content
+                                        </Label>
+                                        <Textarea
+                                          id="edit-script"
+                                          value={editingScript?.script}
+                                          onChange={(e) => editingScript ? setEditingScript({...editingScript, script: e.target.value}) : setEditingScript({...script, script: e.target.value})}
+                                          className="bg-muted border-border text-foreground placeholder:text-muted-foreground min-h-[120px]"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="flex justify-end gap-3">
+                                      <Button variant="outline" className="border-border text-foreground hover:bg-muted bg-transparent">
+                                        Cancel
+                                      </Button>
+                                      <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => updateSavedScript(editingScript ?? script)}>
+                                        Save Changes
+                                      </Button>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                  onClick={() => deleteSavedScript(script.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 mr-1" />
+                                  Delete
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </CardContent>
       </Card>
 
       {/* Ad Management */}
-      <Card className="bg-gray-800 border border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader
-          className="cursor-pointer flex flex-row items-center justify-between"
+          className="cursor-pointer flex flex-row items-center justify-between border-b border-border hover:bg-muted/30 transition-colors"
           onClick={() => setShowAdSettings(!showAdSettings)}
         >
-          <CardTitle className="text-xl font-semibold text-white">Ad Management</CardTitle>
-          {showAdSettings ? <ChevronUp className="text-white" /> : <ChevronDown className="text-white" />}
+          <CardTitle className="text-xl font-semibold text-foreground">Ad Management</CardTitle>
+          {showAdSettings ? <ChevronUp className="text-muted-foreground" /> : <ChevronDown className="text-muted-foreground" />}
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6 pt-6">
           {showAdSettings && (
             <>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="google_client_id" className="text-white">Google Client ID</Label>
+              <div className="space-y-2">
+                <Label htmlFor="google_client_id" className="text-sm font-medium text-foreground">Google Client ID</Label>
                 <Input
                   id="google_client_id"
                   value={adSettings.google_client_id}
                   onChange={(e) => setAdSettings({...adSettings, google_client_id: e.target.value})}
                   placeholder="Enter your Google Client ID"
-                  className="border-gray-300"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
 
@@ -885,12 +905,20 @@ export default function SettingsPage() {
                 })}
               />
 
-              <Button
-                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
-                onClick={saveAdSettings}
-              >
-                Save Ad Settings
-              </Button>
+              <div className="flex gap-3 justify-end pt-6 border-t border-border">
+                <Button
+                  variant="outline"
+                  className="border-border text-foreground hover:bg-muted bg-transparent"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  onClick={saveAdSettings}
+                >
+                  Save Ad Settings
+                </Button>
+              </div>
             </>
           )}
         </CardContent>

@@ -5,9 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 import React, { useState, useEffect } from 'react';
-import { Search, Save, Gamepad } from 'lucide-react';
+import { Search, Save, Gamepad, Download, Filter, CheckCircle2, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   Table, 
@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge"
 import { Pagination } from '@/components/pagination';
 import { toast, Toaster } from 'sonner';
 import { getOrCreateProviderId } from '@/lib/utils/provider';
@@ -45,6 +46,7 @@ export default function ImportGamesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [selectedApi, setSelectedApi] = useState<'gamepix' | 'gamemonetize'>('gamepix');
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -64,7 +66,6 @@ export default function ImportGamesPage() {
     if (savedSelections) {
       setSelectedGames(new Set(JSON.parse(savedSelections)));
     };
-
   }, []);
 
   useEffect(() => {
@@ -194,15 +195,21 @@ export default function ImportGamesPage() {
   };
 
   const handleSaveGames = async (saveAll: boolean) => {
+    setIsSaving(true);
     const gamesToSave = saveAll 
       ? allGames
       : allGames.filter(game => selectedGames.has(game.id));
     
-    const response = await saveGames(gamesToSave, provider);
-    if (response.success){
-      toast.success(`${saveAll ? 'All' : 'Selected'} games saved successfully`);
-    } else if (response.error) {
-      toast.error(response.message);
+    try {
+      const response = await saveGames(gamesToSave, provider);
+      if (response.success){
+        toast.success(`Successfully imported ${gamesToSave.length} game${gamesToSave.length !== 1 ? 's' : ''}`);
+        setSelectedGames(new Set());
+      } else if (response.error) {
+        toast.error(response.message);
+      }
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -211,158 +218,299 @@ export default function ImportGamesPage() {
 
   return (
     <Suspense fallback={<Loading />}>
-      <div className="space-y-6 p-6 md:p-8 bg-background text-foreground">
-        <div>
-          <h1 className="text-4xl font-bold text-foreground">Import Games</h1>
-          <p className="text-muted-foreground mt-2">Add games from external providers to your catalog</p>
-        </div>
-
-        {/* Filters Card */}
-        <Card className="bg-card border-border shadow-sm">
-          <CardContent className="p-6 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-              <div>
-                <Label className="text-sm font-medium text-foreground block mb-2">Game Provider</Label>
-                <Select
-                  onValueChange={(value: "gamepix" | "gamemonetize") => setSelectedApi(value)}
-                  defaultValue="gamemonetize"
-                >
-                  <SelectTrigger className="bg-muted border-border text-foreground">
-                    <SelectValue placeholder="Select API" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border">
-                    <SelectItem value="gamepix">GamePix</SelectItem>
-                    <SelectItem value="gamemonetize">GameMonetize</SelectItem>
-                  </SelectContent>
-                </Select>
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto p-6 md:p-8 space-y-8">
+          {/* Header Section */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-primary/10 rounded-lg">
+                <Download className="h-6 w-6 text-primary" />
               </div>
-
               <div>
-                <Label className="text-sm font-medium text-foreground block mb-2">Category</Label>
-                <Select onValueChange={(value) => setSelectedCategory(value)}>
-                  <SelectTrigger className="bg-muted border-border text-foreground">
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border">
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">Game Import Manager</h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Import and manage games from external providers
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Available Games</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">{allGames.length}</p>
+                  </div>
+                  <div className="p-3 bg-primary/10 rounded-lg">
+                    <Database className="h-5 w-5 text-primary" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Selected</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">{selectedGames.size}</p>
+                  </div>
+                  <div className="p-3 bg-accent/10 rounded-lg">
+                    <CheckCircle2 className="h-5 w-5 text-accent" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Provider</p>
+                    <p className="text-2xl font-bold text-foreground mt-1 capitalize">{selectedApi}</p>
+                  </div>
+                  <div className="p-3 bg-secondary/10 rounded-lg">
+                    <Gamepad className="h-5 w-5 text-secondary" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Filters Section */}
+          <Card className="border-border/50 shadow-sm">
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <Filter className="h-5 w-5 text-primary" />
+                <CardTitle className="text-lg font-semibold">Filters & Search</CardTitle>
+              </div>
+              <CardDescription>Configure your import criteria</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">Game Provider</Label>
+                  <Select
+                    onValueChange={(value: "gamepix" | "gamemonetize") => setSelectedApi(value)}
+                    defaultValue="gamepix"
+                  >
+                    <SelectTrigger className="bg-background border-border/60">
+                      <SelectValue placeholder="Select provider" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="gamepix">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                          GamePix
+                        </div>
                       </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                      <SelectItem value="gamemonetize">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-accent" />
+                          GameMonetize
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div>
-                <Label className="text-sm font-medium text-foreground block mb-2">Search</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search by title..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="pl-10 bg-muted border-border text-foreground placeholder:text-muted-foreground"
-                  />
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">Category Filter</Label>
+                  <Select onValueChange={(value) => setSelectedCategory(value === 'all' ? '' : value)} value={selectedCategory || 'all'}>
+                    <SelectTrigger className="bg-background border-border/60">
+                      <SelectValue placeholder="All categories" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px]">
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">Search Games</Label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Search by title..."
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      className="pl-10 bg-background border-border/60"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Games Table */}
-        <Card className="bg-card border-border shadow-sm">
-          <CardHeader className="border-b border-border flex items-center justify-between">
-            <CardTitle className="text-xl font-semibold text-foreground">
-              Game Catalog ({selectedGames.size} selected)
-            </CardTitle>
-            <div className="flex gap-3">
-              <Button
-                onClick={() => handleSaveGames(false)}
-                variant="outline"
-                disabled={selectedGames.size === 0}
-                className="border-border text-foreground hover:bg-muted"
-              >
-                <Save className="h-4 w-4 mr-2" /> Save Selected ({selectedGames.size})
-              </Button>
-              <Button
-                onClick={() => handleSaveGames(true)}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                disabled={allGames.length === 0}
-              >
-                <Save className="h-4 w-4 mr-2" /> Save All
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            {isLoading ? (
-              <div className="text-center py-12 text-muted-foreground">Loading games...</div>
-            ) : (
-              <>
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-border bg-muted/30 hover:bg-muted/30">
-                      <TableHead className="w-[50px] text-foreground font-semibold">
-                        <Checkbox checked={areAllCurrentPageSelected} onCheckedChange={handleSelectAll} />
-                      </TableHead>
-                      <TableHead className="text-foreground font-semibold">Thumbnail</TableHead>
-                      <TableHead className="text-foreground font-semibold">Title</TableHead>
-                      <TableHead className="text-foreground font-semibold">Category</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {displayedGames.map((game) => (
-                      <TableRow key={game.id} className="border-border hover:bg-muted/50 transition-colors">
-                        <TableCell className="py-3">
-                          <Checkbox
-                            checked={selectedGames.has(game.id)}
-                            onCheckedChange={(checked) => handleSelectGame(game.id, checked as boolean)}
-                          />
-                        </TableCell>
-                        <TableCell className="py-3">
-                          {game.thumbnailUrl ? (
-                            <img
-                              src={game.thumbnailUrl || "/placeholder.svg"}
-                              alt={`${game.title} thumbnail`}
-                              className="w-14 h-14 object-cover rounded-md border border-border"
-                            />
-                          ) : (
-                            <div className="w-14 h-14 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground">
-                              No Image
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell className="font-medium text-foreground">{game.title}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm">{game.category || 'N/A'}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-
-                {/* Pagination */}
-                <div className="mt-4 flex justify-center">
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    baseUrl="/admin/import-games"
-                    setCurrentPage={setCurrentPage}
-                  />
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* No Results Handling */}
-        {!isLoading && displayedGames.length === 0 && (
-          <Card className="bg-card border-border">
-            <CardContent className="text-center py-12">
-              <Gamepad className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-              <p className="text-muted-foreground">No games found. Try adjusting your filters.</p>
             </CardContent>
           </Card>
-        )}
-        <Toaster position="bottom-right" />
+
+          {/* Games Table */}
+          <Card className="border-border/50 shadow-sm">
+            <CardHeader className="border-b border-border/50 bg-muted/30">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                    Game Catalog
+                    {selectedGames.size > 0 && (
+                      <Badge variant="secondary" className="ml-2">
+                        {selectedGames.size} selected
+                      </Badge>
+                    )}
+                  </CardTitle>
+                  <CardDescription className="mt-1">
+                    {allGames.length} games available for import
+                  </CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => handleSaveGames(false)}
+                    variant="outline"
+                    disabled={selectedGames.size === 0 || isSaving}
+                    className="border-border/60"
+                    size="sm"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    Import Selected ({selectedGames.size})
+                  </Button>
+                  <Button
+                    onClick={() => handleSaveGames(true)}
+                    disabled={allGames.length === 0 || isSaving}
+                    size="sm"
+                    className="bg-gradient-to-r from-primary to-accent hover:opacity-90"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Import All
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              {isLoading ? (
+                <div className="flex flex-col items-center justify-center py-16 space-y-4">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                  <p className="text-sm text-muted-foreground">Loading games from {selectedApi}...</p>
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="border-border/50 bg-muted/20 hover:bg-muted/20">
+                          <TableHead className="w-12">
+                            <Checkbox 
+                              checked={areAllCurrentPageSelected} 
+                              onCheckedChange={handleSelectAll}
+                              className="border-border"
+                            />
+                          </TableHead>
+                          <TableHead className="w-20">Preview</TableHead>
+                          <TableHead className="font-semibold">Title</TableHead>
+                          <TableHead className="font-semibold">Category</TableHead>
+                          <TableHead className="w-24 text-center">Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {displayedGames.map((game) => (
+                          <TableRow 
+                            key={game.id} 
+                            className="border-border/50 hover:bg-muted/30 transition-colors"
+                          >
+                            <TableCell>
+                              <Checkbox
+                                checked={selectedGames.has(game.id)}
+                                onCheckedChange={(checked) => handleSelectGame(game.id, checked as boolean)}
+                                className="border-border"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              {game.thumbnailUrl ? (
+                                <img
+                                  src={game.thumbnailUrl}
+                                  alt={game.title}
+                                  className="w-16 h-16 object-cover rounded-lg border border-border/50 shadow-sm"
+                                />
+                              ) : (
+                                <div className="w-16 h-16 bg-muted/50 rounded-lg flex items-center justify-center border border-border/50">
+                                  <Gamepad className="h-6 w-6 text-muted-foreground/50" />
+                                </div>
+                              )}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              <div className="flex flex-col">
+                                <span className="text-foreground">{game.title}</span>
+                                {game.description && (
+                                  <span className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                                    {game.description}
+                                  </span>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {game.category ? (
+                                <Badge variant="outline" className="border-border/50">
+                                  {game.category}
+                                </Badge>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">Uncategorized</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {selectedGames.has(game.id) ? (
+                                <Badge className="bg-primary/10 text-primary border-primary/20">
+                                  Selected
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="border-border/50 text-muted-foreground">
+                                  Available
+                                </Badge>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {displayedGames.length > 0 && (
+                    <div className="p-4 border-t border-border/50 bg-muted/10">
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        baseUrl="/admin/import-games"
+                        setCurrentPage={setCurrentPage}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* No Results */}
+          {!isLoading && displayedGames.length === 0 && (
+            <Card className="border-border/50">
+              <CardContent className="flex flex-col items-center justify-center py-16 space-y-4">
+                <div className="p-4 bg-muted/50 rounded-full">
+                  <Gamepad className="h-12 w-12 text-muted-foreground/50" />
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-lg font-medium text-foreground">No games found</p>
+                  <p className="text-sm text-muted-foreground max-w-sm">
+                    Try adjusting your filters or search criteria to find games
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+        <Toaster position="bottom-right" richColors />
       </div>
     </Suspense>
   );
