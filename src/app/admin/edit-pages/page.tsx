@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import { getAllPages, getContactInfo, getPageContent, updatePage, upsertContactInfo } from "@/lib/controllers/dynamic-pages";
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { ContactInfo } from "@/app/(dashboard)/pages/contacts/page";
+import * as monaco from 'monaco-editor';
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
@@ -315,7 +316,7 @@ export default function PolicyEditorPage() {
                           ]
                         });
                         monaco.languages.registerCompletionItemProvider('html', {
-                          provideCompletionItems: (model, position) => {
+                          provideCompletionItems: (model: monaco.editor.ITextModel, position: monaco.Position) => {
                             const suggestions = htmlSuggestions.map((item) => ({
                               label: item.label,
                               kind: monaco.languages.CompletionItemKind.Snippet,

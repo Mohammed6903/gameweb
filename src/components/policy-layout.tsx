@@ -1,7 +1,9 @@
-import { ReactNode } from 'react'
+'use client'
+
+import React, { ReactNode, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from 'dompurify'
 
 interface PolicyLayoutProps {
   title: string
@@ -9,7 +11,15 @@ interface PolicyLayoutProps {
 }
 
 function SafeHTML({ html }: { html: string }) {
-  return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
+  const [sanitizedHtml, setSanitizedHtml] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSanitizedHtml(DOMPurify.sanitize(html))
+    }
+  }, [html])
+
+  return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
 }
 
 export function PolicyLayout({ title, children }: PolicyLayoutProps) {
