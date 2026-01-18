@@ -65,7 +65,7 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
   if (data.user) {
-    return redirect("/admin"); 
+    return redirect("/"); 
   } else {
     return encodedRedirect("error", "/sign-in", "Authentication failed");
   }
