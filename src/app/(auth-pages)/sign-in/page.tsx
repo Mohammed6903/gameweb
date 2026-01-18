@@ -13,38 +13,38 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
 
   return (
     <>
-      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
+      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
         Sign In
       </h1>
 
-      <Card className="w-full max-w-md bg-gray-50 border-none">
+      <Card className="w-full border border-border/50 bg-card/60 text-foreground shadow-lg shadow-black/10">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-700">
+          <CardTitle className="text-lg font-semibold text-foreground/90">
             Welcome Back
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <AuthProviders />
-          <div className="relative">
+            <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-border/60" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-50 px-2 text-muted-foreground">
-                Or continue with
+              <span className="bg-background px-3 text-muted-foreground">
+              Or continue with
               </span>
             </div>
-          </div>
+            </div>
           <form className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input name="email" placeholder="you@example.com" required />
+              <Label htmlFor="email" className="text-foreground/80">Email</Label>
+              <Input name="email" placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring" autoComplete="on" style={{color: "black"}}/>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-foreground/80">Password</Label>
                 <Link
-                  className="text-xs text-purple-500 hover:text-purple-600 underline"
+                  className="text-xs text-primary hover:text-primary/80 underline"
                   href="/forgot-password"
                 >
                   Forgot Password?
@@ -55,20 +55,23 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                 name="password"
                 placeholder="Your password"
                 required
+                className="bg-background/60 border-border/60 focus-visible:ring-ring"
+                autoComplete="on"
+                style={{color: "black"}}
               />
             </div>
             <SubmitButton
               pendingText="Signing In..."
               formAction={signInAction}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
             >
               Sign in
             </SubmitButton>
           </form>
           <FormMessage message={searchParams} />
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link className="text-purple-500 hover:text-purple-600 underline" href="/sign-up">
+            <Link className="text-primary hover:text-primary/80 underline" href="/sign-up">
               Sign up
             </Link>
           </p>

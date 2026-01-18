@@ -46,13 +46,13 @@ export default function Signup(props: {
 
   return (
     <>
-      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
+      <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
         Sign Up
       </h1>
 
-      <Card className="w-full max-w-md bg-gray-50 border-none">
+      <Card className="w-full border border-border/50 bg-card/60 text-foreground shadow-lg shadow-black/10">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-700">
+          <CardTitle className="text-lg font-semibold text-foreground/90">
             Create Your Account
           </CardTitle>
         </CardHeader>
@@ -60,31 +60,38 @@ export default function Signup(props: {
           <AuthProviders />
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-border/60" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-50 px-2 text-muted-foreground">
-                Or continue with
+              <span className="bg-background px-3 text-muted-foreground">
+              Or continue with
               </span>
             </div>
           </div>
           <form className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input id="firstName" name="firstName" placeholder="John" required />
+                <Label htmlFor="firstName" className="text-foreground/80">First Name</Label>
+                <Input 
+                  id="firstName" 
+                  name="firstName" 
+                  placeholder="John" 
+                  required 
+                  className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" 
+                  style={{color: "black"}}
+                />              
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input id="lastName" name="lastName" placeholder="Doe" required />
+                <Label htmlFor="lastName" className="text-foreground/80">Last Name</Label>
+                <Input id="lastName" name="lastName" style={{color: "black"}} placeholder="Doe" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+              <Label htmlFor="email" className="text-foreground/80">Email</Label>
+              <Input id="email" name="email" type="email" style={{color: "black"}} placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-foreground/80">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -93,12 +100,14 @@ export default function Signup(props: {
                   placeholder="Your password"
                   minLength={6}
                   required
+                  style={{color: "black"}}
+                  className="bg-background/60 border-border/60 focus-visible:ring-ring pr-10 text-foreground"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-foreground/70"
                   onClick={togglePasswordVisibility}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
@@ -107,7 +116,7 @@ export default function Signup(props: {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-foreground/80">Confirm Password</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -116,12 +125,14 @@ export default function Signup(props: {
                   placeholder="Confirm your password"
                   minLength={6}
                   required
+                  style={{color: "black"}}
+                  className="bg-background/60 border-border/60 focus-visible:ring-ring pr-10 text-foreground"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-foreground/70"
                   onClick={toggleConfirmPasswordVisibility}
                   aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                 >
@@ -132,15 +143,15 @@ export default function Signup(props: {
             <SubmitButton
               formAction={signUpAction}
               pendingText="Signing up..."
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
             >
               Sign up
             </SubmitButton>
           </form>
           {searchParams && <FormMessage message={searchParams} />}
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link className="text-purple-500 hover:text-purple-600 underline" href="/sign-in">
+            <Link className="text-primary hover:text-primary/80 underline" href="/sign-in">
               Sign in
             </Link>
           </p>

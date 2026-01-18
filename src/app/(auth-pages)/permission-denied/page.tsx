@@ -4,18 +4,18 @@ import Link from "next/link"
 
 export default function PermissionDenied() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
       <div className="w-full max-w-md space-y-8">
-        <h1 className="text-3xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
+        <h1 className="text-3xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
           Permission Denied
         </h1>
 
-        <Card className="w-full max-w-md bg-gray-50 border-none">
+        <Card className="w-full border border-border/50 bg-card/60 text-foreground shadow-lg shadow-black/10">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-700 flex items-center justify-center">
+            <CardTitle className="text-lg font-semibold text-foreground/90 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-red-500 mr-2"
+                className="h-6 w-6 text-destructive mr-2"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -31,13 +31,13 @@ export default function PermissionDenied() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-center text-gray-600">
+            <p className="text-center text-muted-foreground">
               Sorry, you don't have permission to access this page. If you believe this is an error, please contact the administrator.
             </p>
             <div className="flex justify-center">
               <Button
                 asChild
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                className="bg-gradient-to-r from-primary to-accent hover:opacity-90"
               >
                 <Link href="/">
                   Return to Homepage
