@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { getGameBySlug } from '@/lib/controllers/games';
+import { getGameBySlug, getRelatedGames } from '@/lib/controllers/games';
 import { getAuthenticatedUser } from '@/lib/controllers/users';
 import { getAdSettings } from '@/lib/controllers/ads';
 import dynamic from 'next/dynamic';
@@ -11,11 +11,12 @@ const GamePage = dynamic(() => import('./clientPage'), {
   loading: () => <Loading />
 });
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const game = await getGameBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const game = await getGameBySlug(slug);
   const metaResult = await getMeta();
   const metaData = metaResult.status === 200 ? metaResult.data || {} : {};
-  const siteTitle = metaData.site_name || "Game Web";
+  const siteTitle = metaData.site_name || process.env.NEXT_PUBLIC_SITE_NAME;
   
   return {
     title: `Play ${game.name} | ${siteTitle}`,
@@ -34,11 +35,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ServerGamePage({ params }: { params: { slug: string } }) {
-  const [game, user, adResponse] = await Promise.all([
-    getGameBySlug(params.slug),
+export default async function ServerGamePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const [game, user, adResponse, relatedGames] = await Promise.all([
+    getGameBySlug(slug),
     getAuthenticatedUser(),
-    getAdSettings()
+    getAdSettings(),
+    getRelatedGames(slug, 8)
   ]);
 
   return (
@@ -47,6 +50,7 @@ export default async function ServerGamePage({ params }: { params: { slug: strin
         game={game} 
         user={user} 
         adSetting={adResponse.data}
+        relatedGames={relatedGames}
       />
     </Suspense>
   );

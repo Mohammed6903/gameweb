@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dynamic from 'next/dynamic';
-import { getAllPages, getContactInfo, getPageContent, updatePage, upsertContactInfo } from "@/lib/controllers/dynamicPages";
+import { getAllPages, getContactInfo, getPageContent, updatePage, upsertContactInfo } from "@/lib/controllers/dynamic-pages";
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { ContactInfo } from "@/app/(dashboard)/pages/contacts/page";
 

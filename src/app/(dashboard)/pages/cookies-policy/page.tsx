@@ -1,5 +1,5 @@
-import { PolicyLayout, SafeHTML } from '@/components/PolicyLayout'
-import { getPageContent } from '@/lib/controllers/dynamicPages';
+import { PolicyLayout, SafeHTML } from '@/components/policy-layout'
+import { getPageContent } from '@/lib/controllers/dynamic-pages';
 
 interface CookiesPolicyContent {
   content: string

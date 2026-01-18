@@ -18,16 +18,16 @@ export default function TrendingGamesPage() {
         fetchNew();
     }, [])
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white p-6 md:p-8 lg:p-12">
+        <div className="min-h-screen bg-background text-foreground p-6 md:p-8 lg:p-12">
         <div className="max-w-7xl mx-auto space-y-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-12">
             Trending Games
             </h1>
 
             <section className="space-y-6">
             <div className="flex items-center gap-4 mb-6">
-                <Flame className="w-8 h-8 text-orange-500" />
-                <h2 className="text-3xl font-bold">Hot Right Now</h2>
+                <Flame className="w-8 h-8 text-accent" />
+                <h2 className="text-3xl font-bold text-foreground">Hot Right Now</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {trendingGames && trendingGames.map((game) => (
@@ -42,16 +42,16 @@ export default function TrendingGamesPage() {
 
 function GameCard({ game }: { game: any }) {
   return (
-    <div className="bg-white/10 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-      <div className="aspect-video relative">
+    <div className="bg-card rounded-lg overflow-hidden shadow-sm border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-md hover:-translate-y-1">
+      <div className="aspect-video relative bg-muted overflow-hidden group">
         <img
-          src={game.thumbnail_url}
+          src={game.thumbnail_url || "/placeholder.svg"}
           alt={game.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
-        <div className="absolute inset-0 bg-black/20 hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <Link href={`/play/${game.id}`} passHref>
-            <Button className="bg-white/30 hover:bg-white/50 text-white gap-2">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
               Play Now
               <ExternalLink className="w-4 h-4" />
             </Button>
@@ -59,12 +59,12 @@ function GameCard({ game }: { game: any }) {
         </div>
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-semibold truncate">{game.name}</h3>
-        <div className="flex flex-wrap gap-2 mt-2">
+        <h3 className="text-sm font-semibold truncate text-foreground">{game.name}</h3>
+        <div className="flex flex-wrap gap-2 mt-3">
           {game.categories.map((category: string) => (
             <span
               key={category}
-              className="text-xs px-2 py-1 rounded-full bg-purple-700/30 text-purple-300"
+              className="text-xs px-2 py-1 rounded bg-muted text-muted-foreground"
             >
               {category}
             </span>

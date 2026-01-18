@@ -25,7 +25,7 @@ import { Pagination } from '@/components/pagination';
 import { toast, Toaster } from 'sonner';
 import { getOrCreateProviderId } from '@/lib/utils/provider';
 import { ExternalGame } from '@/types/games';
-import { saveGames } from '@/lib/controllers/importGame';
+import { saveGames } from '@/lib/controllers/import-game';
 
 interface Category {
   id: string;

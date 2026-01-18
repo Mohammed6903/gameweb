@@ -44,20 +44,20 @@ export default function ClientCategoryPage({ category, gameProp, totalProp, hand
   }, [currentPage])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white p-6 md:p-8 lg:p-12">
+    <div className="min-h-screen bg-background text-foreground p-6 md:p-8 lg:p-12">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Category Header */}
-        <section className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-xl">
+        <section className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-6">
-            <div className="size-16 rounded-2xl bg-violet-600 flex items-center justify-center shrink-0 shadow-lg">
-              <Tag className="size-10 text-white" />
+            <div className="size-16 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+              <Tag className="size-10 text-primary" />
             </div>
             <div className="flex-grow">
-              <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
-                {capitalizeCategory(category)} Games
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                {capitalizeCategory(category)}
               </h1>
-              <p className="text-purple-300 mt-2">
-                {total} games in this category
+              <p className="text-muted-foreground mt-2 text-sm">
+                {total} {total === 1 ? 'game' : 'games'} available
               </p>
             </div>
             {/* <div className="flex items-center space-x-4">
@@ -75,34 +75,34 @@ export default function ClientCategoryPage({ category, gameProp, totalProp, hand
         </section>
 
         {/* Games Grid */}
-        <Suspense fallback={<div className="h-96 bg-white/5 rounded-3xl animate-pulse"></div>}>
+        <Suspense fallback={<div className="h-96 bg-card rounded-lg animate-pulse"></div>}>
           <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {games && games.map((game: FetchedGameData) => (
               <div 
                 key={game.id} 
-                className="bg-white/10 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="bg-card rounded-lg overflow-hidden shadow-sm border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
               >
-                <div className="aspect-video relative">
+                <div className="aspect-video relative bg-muted overflow-hidden group">
                   {game.thumbnail_url && (
                     <img
-                      src={game.thumbnail_url} 
+                      src={game.thumbnail_url || "/placeholder.svg"} 
                       alt={game.name} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                   )}
-                  <div className="absolute inset-0 bg-black/20 hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
-                    <Button className="bg-white/30 hover:bg-white/50 text-white" onClick={() => router.push(`/play/${game.id}`)}>
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => router.push(`/play/${game.id}`)}>
                       Play Now
                     </Button>
                   </div>
                 </div>
                 <div className="p-4 hidden sm:block">
-                  <h3 className="text-lg font-semibold truncate">{game.name}</h3>
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <h3 className="text-sm font-semibold truncate text-foreground">{game.name}</h3>
+                  <div className="flex flex-wrap gap-2 mt-3">
                     {game.categories.slice(0, 2).map((cat: string) => (
                       <span 
                         key={cat} 
-                        className="text-xs px-2 py-1 rounded-full bg-purple-700/30 text-purple-300"
+                        className="text-xs px-2 py-1 rounded bg-muted text-muted-foreground"
                       >
                         {cat}
                       </span>

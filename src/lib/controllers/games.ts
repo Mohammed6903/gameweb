@@ -446,3 +446,73 @@ export async function fetchAllGamesForSitemap() {
     throw error;
   }
 }
+
+export async function getRelatedGames(gameId: string, limit: number = 10) {
+  const supabase = await createClient();
+  
+  try {
+    // First, get the current game
+    const currentGame = await getGameById(gameId);
+    
+    if (!currentGame) {
+      throw new Error('Game not found');
+    }
+
+    // Fetch all active games except the current one
+    const { data: allGames, error } = await supabase
+      .from('games')
+      .select('id, name, thumbnail_url, categories, tags, description')
+      .eq('is_active', true)
+      .neq('id', gameId);
+
+    if (error) {
+      throw new Error(`Error fetching games: ${error.message}`);
+    }
+
+    // Calculate similarity scores
+    const scoredGames = allGames.map((game) => {
+      let score = 0;
+
+      // Category matching (higher weight)
+      const currentCategories = currentGame.categories || [];
+      const gameCategories = game.categories || [];
+      const categoryMatches = currentCategories.filter((cat: string) =>
+        gameCategories.includes(cat)
+      ).length;
+      score += categoryMatches * 3;
+
+      // Tag matching (lower weight)
+      const currentTags = currentGame.tags || [];
+      const gameTags = game.tags || [];
+      const tagMatches = currentTags.filter((tag: string) =>
+        gameTags.includes(tag)
+      ).length;
+      score += tagMatches * 1;
+
+      // Bonus for having all or most categories in common
+      if (
+        currentCategories.length > 0 &&
+        categoryMatches === currentCategories.length
+      ) {
+        score += 5;
+      }
+
+      return {
+        ...game,
+        relevanceScore: score,
+      };
+    });
+
+    // Filter out games with zero score and sort by relevance
+    const relatedGames = scoredGames
+      .filter((game) => game.relevanceScore > 0)
+      .sort((a, b) => b.relevanceScore - a.relevanceScore)
+      .slice(0, limit)
+      .map(({ relevanceScore, ...game }) => game); // Remove relevanceScore from response
+
+    return relatedGames;
+  } catch (error) {
+    console.error('Error fetching related games:', error);
+    throw error;
+  }
+}

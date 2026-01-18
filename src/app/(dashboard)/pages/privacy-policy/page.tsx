@@ -1,5 +1,5 @@
-import { PolicyLayout, SafeHTML } from '@/components/PolicyLayout'
-import { getPageContent } from '@/lib/controllers/dynamicPages';
+import { PolicyLayout, SafeHTML } from '@/components/policy-layout'
+import { getPageContent } from '@/lib/controllers/dynamic-pages';
 
 interface PrivacyPolicyContent {
   content: string
@@ -13,7 +13,7 @@ async function getPrivacyPolicyContent(): Promise<PrivacyPolicyContent> {
     return {
       content: `
         <h2>Privacy Policy</h2>
-        <p>At GameGrid, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, disclose, and safeguard your data when you use our website and services.</p>
+        <p>At ${process.env.NEXT_PUBLIC_SITE_NAME}, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, disclose, and safeguard your data when you use our website and services.</p>
         
         <h3>1. Information We Collect</h3>
         <p>We may collect the following types of information:</p>
@@ -63,9 +63,9 @@ async function getPrivacyPolicyContent(): Promise<PrivacyPolicyContent> {
         <h3>8. Contact Us</h3>
         <p>If you have any questions about this Privacy Policy, please contact us at:</p>
         <p>
-          GameGrid Inc.<br>
+          ${process.env.NEXT_PUBLIC_SITE_NAME} Inc.<br>
           123 Gaming Street, Pixel City, 12345<br>
-          Email: privacy@gamegrid.com<br>
+          Email: privacy@${process.env.NEXT_PUBLIC_SITE_NAME}.com<br>
           Phone: +1 (555) 123-4567
         </p>
   

@@ -1,14 +1,14 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { ProviderForm, ProviderFormData, Provider } from '@/components/admin/ProviderForm';
+import { ProviderForm, ProviderFormData, Provider } from '@/components/admin/provider-form';
 import { addProvider, getAllProviders } from '@/lib/controllers/providers';
 import { useRouter } from 'next/navigation';
 import { toast, Toaster } from 'sonner';
 import { GameFormData } from '@/types/games';
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CreateGameForm } from '@/components/admin/CreateGameForm';
+import { CreateGameForm } from '@/components/admin/create-game-form';
 import axios from 'axios';
 import { getAllCategories } from '@/lib/controllers/categories';
 import { getAllTags } from '@/lib/controllers/tags';

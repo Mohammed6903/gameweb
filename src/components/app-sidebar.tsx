@@ -50,26 +50,27 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
       className={`
         ${open ? 'w-64' : 'w-0 md:w-16'} 
         transition-all duration-300 ease-in-out 
-        bg-purple-900
-        text-white
-        shadow-xl
+        bg-card
+        text-foreground
+        border-r border-border
+        md:mt-16
       `}
     >
-      <SidebarHeader className="h-16 flex items-center justify-center border-b bg-purple-700 border-purple-700/50">
+      <SidebarHeader className="h-16 flex items-center justify-center border-b border-border px-4">
         <h1 className={`
-          text-2xl font-bold text-white
+          text-lg font-bold text-foreground
           transition-opacity duration-300
         `}>
-          {siteName ? siteName : 'Game Web'}
+          {siteName ? siteName : process.env.NEXT_PUBLIC_SITE_NAME}
         </h1>
       </SidebarHeader>
-      <SidebarContent className='bg-purple-700 custom-scrollbar'>
+      <SidebarContent className='bg-card custom-scrollbar'>
         <SidebarGroup>
           <SidebarGroupLabel className={`
-            text-white/90 font-semibold px-4 py-2 text-sm
+            text-muted-foreground font-semibold px-4 py-2 text-xs uppercase tracking-wider
             ${open ? '' : 'md:hidden'}
           `}>
-            Main Navigation
+            Navigation
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -78,13 +79,13 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
                   <SidebarMenuButton asChild>
                     <a href={item.url} className="
                       flex items-center gap-3 py-2.5 px-4 
-                      rounded-lg hover:bg-purple-800/50
+                      rounded-md hover:bg-muted
                       transition-colors duration-200
-                      text-white/90 hover:text-white
+                      text-muted-foreground hover:text-foreground
                     ">
                       <item.icon className="size-5 flex-shrink-0" />
                       <span className={`
-                        transition-opacity duration-300 whitespace-nowrap
+                        transition-opacity duration-300 whitespace-nowrap text-sm
                       `}>
                         {item.name}
                       </span>
@@ -98,7 +99,7 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
 
         <SidebarGroup className="mt-6">
           <SidebarGroupLabel className={`
-            text-white/90 font-semibold px-4 py-2 text-sm
+            text-muted-foreground font-semibold px-4 py-2 text-xs uppercase tracking-wider
             ${open ? '' : 'md:hidden'}
           `}>
             Categories
@@ -110,10 +111,10 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
                   <SidebarMenuButton asChild>
                     <a href={`/categories/${item.category}`} className="
                       flex items-center justify-between py-2.5 px-4 
-                      rounded-lg hover:bg-purple-800/50
+                      rounded-md hover:bg-muted
                       transition-colors duration-200
-                      text-white/90 hover:text-white
-                      group
+                      text-muted-foreground hover:text-foreground
+                      group text-sm
                     ">
                       <span className={`
                         transition-opacity duration-300 whitespace-nowrap
@@ -121,8 +122,8 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
                         {capitalizeCategory(item.category)}
                       </span>
                       <span className={`
-                        text-sm bg-purple-800/50 px-2 py-0.5 rounded-md
-                        text-white/75 group-hover:text-white} transition-all duration-300
+                        text-xs bg-muted px-2 py-0.5 rounded
+                        text-muted-foreground group-hover:text-accent transition-all duration-300
                       `}>
                         {item.count}
                       </span>

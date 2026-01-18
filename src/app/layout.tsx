@@ -5,7 +5,8 @@ import "./globals.css";
 import { getFavIcons, getMeta } from "@/lib/controllers/meta";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { getAllHeadScripts, getAllScripts } from "@/lib/controllers/ads";
-import DynamicScripts from "@/components/adSense/DynamicScripts";
+import DynamicScripts from "@/components/adSense/dynamic-scripts";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 // Font definitions
 const geistSans = localFont({
@@ -61,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // Process site metadata
   const metaData = metaResult.status === 200 ? metaResult.data || {} : {};
-  const siteTitle = metaData.site_name || "Game Web";
+  const siteTitle = metaData.site_name || process.env.NEXT_PUBLIC_SITE_NAME;
   const siteDescription =
     metaData.description || "A Gaming website for people of all ages";
 
@@ -133,10 +134,10 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Inject Ads dynamically */}
         <DynamicScripts headScripts={headData} adsData={adsData} />
-
-        {/* Main Application Content */}
-        {children}
-
+        <ThemeProvider defaultTheme="system" storageKey="gameweb-theme">
+          {/* Main Application Content */}
+          {children}
+        </ThemeProvider>
         {/* Google Analytics */}
         <GoogleAnalytics gaId="G-0TVV790ZXC" />
       </body>

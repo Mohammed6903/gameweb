@@ -2,10 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
-  // This `try/catch` block is only here for the interactive tutorial.
-  // Feel free to remove once you have Supabase connected.
   try {
-    // Create an unmodified response
     let response = NextResponse.next({
       request: {
         headers: request.headers,
@@ -35,28 +32,33 @@ export const updateSession = async (request: NextRequest) => {
       },
     );
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    const {data: roleData, error: roleError} = await supabase.from('user_roles').select('role').eq('user_id', user?.id).single();
+    // Only check auth for /admin routes
+    if (request.nextUrl.pathname.startsWith('/admin')) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      
+      if (!user) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/sign-in';
+        return NextResponse.redirect(url);
+      }
 
-  
-    if (
-      !(user ? roleData?.role === 'admin' : true) &&
-      !request.nextUrl.pathname.startsWith('/api') &&
-      !request.nextUrl.pathname.startsWith('/admin')
-    ) {
-      // no user, potentially respond by redirecting the user to the login page
-      const url = request.nextUrl.clone()
-      url.pathname = '/sign-in'
-      return NextResponse.redirect(url)
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single();
+
+      if (roleError || roleData?.role !== 'admin') {
+        const url = request.nextUrl.clone();
+        url.pathname = '/permission-denied';
+        return NextResponse.redirect(url);
+      }
     }
 
     return response;
   } catch (e) {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
-    // Check out http://localhost:3000 for Next Steps.
     return NextResponse.next({
       request: {
         headers: request.headers,

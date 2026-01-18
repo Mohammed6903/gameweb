@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/admin/Sidebar"
+import { Sidebar } from "@/components/admin/side-bar"
 import { createClient } from "@/lib/utils/supabase/server"
 import { redirect } from "next/navigation"
 import type React from "react" // Added import for React

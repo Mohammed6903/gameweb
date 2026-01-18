@@ -1,7 +1,9 @@
 'use client'
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSideBar } from "@/components/AppSideBar";
-import { NavBar } from "@/components/NavBar";
+import React from "react"
+
+import { AppSideBar } from "@/components/app-sidebar";
+import { NavBar } from "@/components/nav-bar";
 import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import { getMeta } from "@/lib/controllers/meta";
@@ -15,22 +17,28 @@ export default function DashboardLayout({
 }>) {
   const [isOpen, setIsOpen] = useState(false);
   const { siteName, setSiteName } = useMetadataStore();
+  const [hasFetched, setHasFetched] = useState(false);
   
   useEffect(() => {
-    const fetch = async () => {
+    // Only fetch once
+    if (hasFetched) return;
+    
+    const fetchMeta = async () => {
       const metaResult = await getMeta();
-      const metaData = metaResult.status === 200 && metaResult.data ? metaResult.data : {};
-      setSiteName(metaData.site_name);
+      if (metaResult.status === 200 && metaResult.data) {
+        setSiteName(metaResult.data.site_name);
+      }
+      setHasFetched(true);
     };
-    fetch();
-  }, [siteName])
+    fetchMeta();
+  }, [hasFetched, setSiteName]); // Remove siteName from deps!
 
   return (
     <SidebarProvider 
       open={isOpen}
       onOpenChange={(open) => setIsOpen(open)}
     >
-      <div className="flex flex-col w-full min-h-screen bg-[#0f0f1a] text-white">
+      <div className="flex flex-col w-full min-h-screen bg-background text-foreground">
         <NavBar siteName={siteName}/>
         <div className="flex flex-1 overflow-hidden">
           <AppSideBar siteName={siteName}/>

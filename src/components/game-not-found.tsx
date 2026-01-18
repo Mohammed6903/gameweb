@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
 
 const GameNotFound = () => {
   return (
@@ -18,7 +19,7 @@ const GameNotFound = () => {
         </p>
       </div>
       <div className="flex space-x-4">
-        <a 
+        <Link
           href="/" 
           className="inline-block px-6 py-3 rounded-full 
             bg-purple-700 text-white 
@@ -26,7 +27,7 @@ const GameNotFound = () => {
             font-semibold"
         >
           Return to Home
-        </a>
+        </Link>
         {/* <a 
           href="/games" 
           className="inline-block px-6 py-3 rounded-full 

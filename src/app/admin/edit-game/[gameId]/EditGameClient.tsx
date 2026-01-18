@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { UpdateGameForm } from '@/components/admin/UpdateGameForm';
+import { UpdateGameForm } from '@/components/admin/update-game-form';
 import { toast, Toaster } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Game } from '@/types/games';

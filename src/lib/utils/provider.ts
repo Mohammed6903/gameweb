@@ -1,6 +1,6 @@
 'use server'
 
-import { Provider, ProviderFormData } from "@/components/admin/ProviderForm";
+import { Provider, ProviderFormData } from "@/components/admin/provider-form";
 import { getAllProviders, upsertProvider } from '@/lib/controllers/providers';
 
 // Provider configuration

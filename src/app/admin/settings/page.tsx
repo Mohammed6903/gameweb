@@ -7,13 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
-import { UserList } from "@/components/admin/UserList";
+import { UserList } from "@/components/admin/user-list";
 import { listAllUsers, promoteUser } from "@/lib/controllers/users";
 import { getMeta, insertMeta, saveFavIcon } from "@/lib/controllers/meta";
 import { deleteHeadScript, deleteScript, getAdSettings, getAllHeadScripts, getAllScripts, parseElementAttributesFromText, saveHeadScript, saveScript, updateAdSettings } from "@/lib/controllers/ads";
 import { toast, Toaster } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AdTypeSettings } from '@/components/AdTypeSettings';
+import { AdTypeSettings } from '@/components/ad-type-settings';
 import { useRouter } from "next/navigation";
 import {
   Table,
@@ -30,7 +30,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { uploadFavIcon } from "@/lib/services/storageServices";
+import { uploadFavIcon } from "@/lib/services/storage-services";
 import { AdSettings } from "@/types/ads";
 import { SavedScript, HeaderScript } from "@/types/script";
 

@@ -5,7 +5,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { fetchComments, postComment } from "@/lib/controllers/comment";
-import { createClient } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 interface Comment {
   id: number;
@@ -16,9 +16,10 @@ interface Comment {
 
 interface CommentSectionProps {
   gameId: number;
+  userId: string | undefined;
 }
 
-export function CommentSection({ gameId }: CommentSectionProps) {
+export function CommentSection({ gameId, userId }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
 
@@ -36,15 +37,19 @@ export function CommentSection({ gameId }: CommentSectionProps) {
 
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userId) {
+      toast('Sign in to comment');
+      return;
+    }
     if (!newComment.trim()) {
-      alert("Comment cannot be empty!");
+      toast('Comment cannot be empty!');
       return;
     }
   
     try {
       const { data, error } = await postComment(gameId, newComment);
       if (error) {
-        alert("Failed to post comment. Please try again.");
+        toast("Failed to post comment. Please try again.");
         console.error(error);
         return;
       }
@@ -55,7 +60,7 @@ export function CommentSection({ gameId }: CommentSectionProps) {
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
-      alert("Failed to post comment. Please try again.");
+      toast("Failed to post comment. Please try again.");
     }
   };
   

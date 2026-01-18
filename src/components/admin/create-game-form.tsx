@@ -1,7 +1,7 @@
 // 'use client';
-import { BaseGameForm } from './BaseGameForm';
+import { BaseGameForm } from './base-game-form';
 import { GameFormData } from '@/types/games';
-import { Provider } from '@/components/admin/ProviderForm';
+import { Provider } from '@/components/admin/provider-form';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { addGame } from '@/lib/controllers/games';

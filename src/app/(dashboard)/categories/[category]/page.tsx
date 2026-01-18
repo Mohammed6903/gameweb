@@ -3,17 +3,18 @@ import GameNotFound from '@/components/game-not-found'
 import ClientCategoryPage from './clientCategory'
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string
-  },
-  searchParams: {
+  }>,
+  searchParams: Promise<{
     page?: string
-  }
+  }>
 }
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
-  const category = decodeURIComponent(params.category);
-  const currentPage = parseInt(searchParams.page || '1', 10);
+  const { category } = await params;
+  const { page } = await searchParams;
+  const currentPage = parseInt(page || '1', 10);
   const gamesPerPage = 12;
 
   const { games, total } = await getGamesByCategory(category, {

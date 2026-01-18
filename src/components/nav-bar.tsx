@@ -8,7 +8,8 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/utils/supabase/client"
-import { GameSearch } from "./GameSearch"
+import { GameSearch } from "./game-search"
+import { ThemeToggle } from "./theme/theme-toggle"
 import {  
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +23,6 @@ import { getFavIconByType, getFavIcons } from "@/lib/controllers/meta"
 
 interface NavBarprops {
   siteName: string,
-
 }
 
 export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
@@ -106,15 +106,15 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
   }
 
   return (
-    <header className="sticky p-2 top-0 z-50 border-b border-white/10 bg-purple-700">
-      <nav className="flex flex-wrap items-center justify-between h-auto w-full px-4">
+    <header className="sticky top-0 z-50 border-b border-primary/20 bg-card/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+      <nav className="flex flex-wrap items-center justify-between h-16 w-full px-6">
         <div className="flex items-center gap-3">
-          <SidebarTrigger className="text-white/80 hover:text-white" />
-          <Link href="/" className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-white/20 flex items-center justify-center">
-              <img src={favIcon?.publicUrl ? favIcon?.publicUrl : '/favicon.ico'} alt="icon" />
+          <SidebarTrigger className="text-muted-foreground hover:text-foreground transition-colors" />
+          <Link href="/" className="flex items-center gap-3">
+            <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+              <img src={favIcon?.publicUrl ? favIcon?.publicUrl : '/favicon.ico'} alt="icon" className="size-5" />
             </div>
-            <span className="font-semibold text-white">{siteName ? siteName : 'Paneer Gaming'}</span>
+            <span className="font-semibold text-foreground text-lg">{siteName ? siteName : process.env.NEXT_PUBLIC_SITE_NAME}</span>
           </Link>
         </div>
         
@@ -128,27 +128,31 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="sm:hidden text-white/80 hover:text-white hover:bg-white/10"
+            className="sm:hidden text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
             onClick={() => setIsSearchVisible(!isSearchVisible)}
           >
             <Search className="size-5" />
           </Button>
+
+          {/* Theme Toggle Added Here */}
+          <ThemeToggle />
+
           <DropdownMenu open={isLikedGamesOpen} onOpenChange={setIsLikedGamesOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="hidden sm:inline-flex text-white/80 hover:text-white hover:bg-white/10"
+                className="hidden sm:inline-flex text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
                 onClick={handleLikedGamesClick}
               >
                 <Heart className="size-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-white" align="end" forceMount>
+              <DropdownMenuContent className="w-56 bg-card border-border" align="end" forceMount>
               {likedGames.length > 0 ? (
                 likedGames.map((game) => (
                   <DropdownMenuItem key={game.id} className="flex items-center gap-2" onClick={() => goToGame(game.id)}>
-                    <img src={game.thumbnail_url} alt={game.name} className="w-8 h-8 object-cover rounded" />
+                    <img src={game.thumbnail_url || "/placeholder.svg"} alt={game.name} className="w-8 h-8 object-cover rounded" />
                     <span className="text-sm">{game.name}</span>
                   </DropdownMenuItem>
                 ))
@@ -157,17 +161,18 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
+          
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.user_metadata.avatar_url} alt={'User Photo'} />
+                    <AvatarImage src={user.user_metadata.avatar_url || "/placeholder.svg"} alt={'User Photo'} />
                     <AvatarFallback>{emailInfo ? emailInfo.first_name?.[0] : user.user_metadata.name?.[0]}{emailInfo && emailInfo.last_name?.[0]}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-white" align="end" forceMount>
+            <DropdownMenuContent className="w-56 bg-card border-border" align="end" forceMount>
                 <DropdownMenuItem className="flex-col items-start">
                   <div className="text-sm font-medium">{emailInfo ? (emailInfo.first_name + " " + emailInfo.last_name) : user.user_metadata.name}</div>
                   <div className="text-xs text-muted-foreground">{user.email}</div>
@@ -181,28 +186,29 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
           ) : (
             <Button 
               size="sm" 
-              className="hidden sm:inline-flex ml-1.5 bg-white/20 hover:bg-white/30 text-white font-medium"
+              className="hidden sm:inline-flex ml-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors"
               onClick={() => router.push('/sign-in')}
             >
               Sign In
             </Button>
           )}
+          
           <Button 
             variant="ghost" 
             size="icon" 
-            className="sm:hidden text-white/80 hover:text-white hover:bg-white/10"
+            className="sm:hidden text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
           >
             <Menu className="size-5" />
           </Button>
         </div>
       </nav>
       {isSearchVisible && (
-        <div className="w-full px-4 py-2 sm:hidden">
+        <div className="w-full px-6 py-3 sm:hidden border-t border-border">
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" />
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search games..."
-              className="h-9 w-full pl-9 bg-white/10 border-transparent text-white placeholder:text-white/50 focus:bg-white/20 focus:border-white/20"
+              className="h-9 w-full pl-9 bg-muted/50 border-border text-foreground placeholder:text-muted-foreground focus:bg-muted focus:border-primary/30"
             />
           </div>
         </div>

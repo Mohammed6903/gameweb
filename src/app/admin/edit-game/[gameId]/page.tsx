@@ -9,10 +9,11 @@ import { getGameById } from "@/lib/controllers/games"
 export default async function EditGamePage({
   params,
 }: {
-  params: { gameId: string }
+  params: Promise<{ gameId: string }>
 }) {
   try {
-    const gameById = await getGameById(params.gameId)
+    const { gameId } = await params;
+    const gameById = await getGameById(gameId)
 
     const providers = await getAllProviders()
     const categories = (await getAllCategories()).map((item: any) => item.category)

@@ -1,7 +1,7 @@
 'use client'
-import { BaseGameForm } from './BaseGameForm';
+import { BaseGameForm } from './base-game-form';
 import { Game, GameFormData} from '@/types/games';
-import { Provider } from './ProviderForm';
+import { Provider } from './provider-form';
 
 interface UpdateGameFormProps {
   initialData: Game;

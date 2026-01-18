@@ -1,5 +1,5 @@
 'use server'
-import { Provider, ProviderFormData } from "@/components/admin/ProviderForm";
+import { Provider, ProviderFormData } from "@/components/admin/provider-form";
 import { createClient } from "../utils/supabase/server";
 
 export const addProvider = async (providerData: ProviderFormData) => {

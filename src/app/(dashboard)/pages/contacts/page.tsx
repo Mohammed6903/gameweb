@@ -1,8 +1,8 @@
-import { PolicyLayout, SafeHTML } from '@/components/PolicyLayout'
+import { PolicyLayout, SafeHTML } from '@/components/policy-layout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { getContactInfo } from '@/lib/controllers/dynamicPages'
+import { getContactInfo } from '@/lib/controllers/dynamic-pages'
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Github } from 'lucide-react'
 
 interface SocialLink {

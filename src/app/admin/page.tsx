@@ -2,9 +2,9 @@
 import { Gamepad, Users, CheckCircle } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { useDashboardData } from "@/hooks/useDashboardData"
-import { QuickStatsCard } from "@/components/admin/QuickStatCard"
-import { ChartCard } from "@/components/admin/ChartCard"
+import { useDashboardData } from "@/hooks/use-dashboard-data"
+import { QuickStatsCard } from "@/components/admin/quick-stat-card"
+import { ChartCard } from "@/components/admin/chart-card"
 import type { ApexOptions } from "apexcharts"
 
 const GameAnalyticsDashboard = () => {

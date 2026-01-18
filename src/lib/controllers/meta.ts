@@ -32,17 +32,19 @@ export const getMeta = async () => {
     try {
         const { data, error } = await supabase
           .from('site_metadata')
-          .select().single();
+          .select()
+          .maybeSingle();
         
         if (error) {
             console.error("Error fetching site meta:", error);
-            return {error};
+            return { status: 500, error };
         }
 
-        return {status: 200, data: data}
+        // Return empty object if no data found
+        return { status: 200, data: data || {} };
     } catch (error) {
-        console.error("Unexpected error saving site meta:", error);
-        return {error};
+        console.error("Unexpected error fetching site meta:", error);
+        return { status: 500, error };
     }
 }
 
@@ -95,16 +97,16 @@ export const getFavIconByType = async (type: string) => {
           .from('favIcon')
           .select()
           .eq('type', type)
-          .single();
+          .maybeSingle(); // Use maybeSingle() instead of single()
         
         if (error) {
-            console.error("Error saving favIcon in table: ", error);
-            return {error: error.message};
+            console.error("Error fetching favIcon:", error);
+            return { status: 500, error: error.message };
         }
 
-        return {status: 200, data: data}
+        return { status: 200, data: data || null };
     } catch (error) {
-        console.error("Unexpected error saving site meta:", error);
-        return {error: error};
+        console.error("Unexpected error fetching favIcon:", error);
+        return { status: 500, error };
     }
 }

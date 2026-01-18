@@ -6,6 +6,6 @@ interface MetadataState {
 }
 
 export const useMetadataStore = create<MetadataState>((set) => ({
-  siteName: 'Game Web',
+  siteName: process.env.NEXT_PUBLIC_SITE_NAME ?? "Game Web",
   setSiteName: (siteName) => set({ siteName }),
 }));

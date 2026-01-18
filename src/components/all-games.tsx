@@ -1,239 +1,201 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { FetchedGameData } from '@/types/games'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import AdBanner from '@/components/adSense/AdBanner'
-import { getAdSettings } from '@/lib/controllers/ads'
-
-interface AdSettings {
-  google_client_id: string;
-  carousel_ad_frequency: number;
-  carousel_ad_slot: string;
-  carousel_ad_format: string;
-  carousel_ad_full_width: boolean;
-  show_carousel_ads: boolean;
-}
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
 
 interface GamesCarouselProps {
   games: FetchedGameData[]
 }
 
 export function AllGames({ games }: GamesCarouselProps) {
-  const [cardsToShow, setCardsToShow] = useState(1);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [adSettings, setAdSettings] = useState<AdSettings | null>(null);
+  const [cardsToShow, setCardsToShow] = useState(6);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageInput, setPageInput] = useState("1");
   const router = useRouter();
 
-  // Calculate optimal layout based on screen width and available games
   useEffect(() => {
-    const fetchAndSet = async () => {
-      const {data, error} = await getAdSettings();
-      if (data) {
-        setAdSettings(data as AdSettings);
-      }
-    }
-    fetchAndSet();
-
-    const calculateOptimalLayout = () => {
+    const calculateCardsToShow = () => {
       const width = window.innerWidth;
-      let defaultCards;
-      if (width < 640) defaultCards = 1;      
-      else if (width < 768) defaultCards = 2;
-      else if (width < 1024) defaultCards = 3;     
-      else if (width < 1280) defaultCards = 4;     
-      else if (width < 1536) defaultCards = 5;
-      else defaultCards = 6;
-
-      // Adjust cards to show based on available games
-      const totalItems = getTotalItems();
-      if (totalItems < defaultCards) {
-        return Math.max(1, totalItems);
-      }
-      return defaultCards;
+      if (width < 640) setCardsToShow(2);
+      else if (width < 768) setCardsToShow(3);
+      else if (width < 1024) setCardsToShow(4);
+      else if (width < 1280) setCardsToShow(5);
+      else setCardsToShow(6);
     };
 
-    setCardsToShow(calculateOptimalLayout());
-    setCurrentIndex(0);
+    calculateCardsToShow();
+    window.addEventListener('resize', calculateCardsToShow);
+    return () => window.removeEventListener('resize', calculateCardsToShow);
+  }, []);
 
-    const handleResize = () => {
-      setCardsToShow(calculateOptimalLayout());
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [games]);
+  // Sync pageInput when currentPage changes (e.g. via Next/Prev buttons)
+  useEffect(() => {
+    setPageInput((currentPage + 1).toString());
+  }, [currentPage]);
 
   const openGame = (gameId: string) => {
     router.push(`/play/${gameId}`);
   }
 
-  const getTotalItems = () => {
-    if (!adSettings?.show_carousel_ads) return games.length;
-    const adCount = Math.floor(games.length / (adSettings.carousel_ad_frequency || 3));
-    return games.length + adCount;
-  }
+  const totalPages = Math.ceil(games.length / cardsToShow);
+  const startIndex = currentPage * cardsToShow;
+  const endIndex = startIndex + cardsToShow;
+  const currentGames = games.slice(startIndex, endIndex);
 
-  const shouldShowNavigation = () => {
-    const totalItems = getTotalItems();
-    return totalItems > cardsToShow;
-  }
+  // Pagination Logic
+  const goToPage = (pageIndex: number) => {
+    const target = Math.max(0, Math.min(totalPages - 1, pageIndex));
+    setCurrentPage(target);
+  };
 
-  const paginate = (direction: number) => {
-    const totalItems = getTotalItems();
-    if (totalItems <= cardsToShow) return;
+  const goToPrevPage = () => goToPage(currentPage - 1);
+  const goToNextPage = () => goToPage(currentPage + 1);
 
-    setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex + (direction * cardsToShow);
-      if (newIndex < 0) {
-        const lastPageItems = totalItems % cardsToShow;
-        return lastPageItems ? totalItems - lastPageItems : totalItems - cardsToShow;
-      }
-      if (newIndex >= totalItems) return 0;
-      return newIndex;
-    });
-  }
+  const handlePageJump = () => {
+    const page = Number(pageInput);
+    if (!Number.isNaN(page) && page > 0 && page <= totalPages) {
+      goToPage(page - 1);
+    } else {
+      // Reset input to current page if invalid
+      setPageInput((currentPage + 1).toString());
+    }
+  };
 
-  const prepareVisibleItems = () => {
-    if (!adSettings) return games.slice(currentIndex, currentIndex + cardsToShow).map(game => ({ type: 'game', game }));
-
-    const { show_carousel_ads, carousel_ad_frequency } = adSettings;
-    const visibleItems = [];
-    const totalItems = getTotalItems();
+  const getVisiblePages = () => {
+    const maxDots = 7;
+    if (totalPages <= maxDots) return Array.from({ length: totalPages }, (_, i) => i);
     
-    for (let i = 0; i < Math.min(cardsToShow, totalItems); i++) {
-      const itemIndex = (currentIndex + i) % totalItems;
-      const gameIndex = itemIndex - Math.floor(itemIndex / (carousel_ad_frequency + 1));
-      
-      if (show_carousel_ads && itemIndex > 0 && itemIndex % (carousel_ad_frequency + 1) === 0) {
-        visibleItems.push({ type: 'ad', id: `ad-${itemIndex}` });
-      } else if (gameIndex < games.length) {
-        visibleItems.push({ type: 'game', game: games[gameIndex] });
-      }
-    }
-    return visibleItems;
-  }
-
-  const getContainerClasses = () => {
-    if (games.length === 1) {
-      return 'max-w-2xl mx-auto px-4'; // Centered, narrower container for single game
-    }
-    return 'max-w-7xl mx-auto px-4'; // Full width for multiple games
-  }
-
-  const getGridColumns = () => {
-    const totalItems = getTotalItems();
-    const columns = Math.min(cardsToShow, totalItems);
+    // Logic to center the active page among the dots
+    const start = Math.max(0, Math.min(currentPage - 3, totalPages - maxDots));
+    const end = Math.min(totalPages - 1, start + maxDots - 1);
     
-    if (games.length === 1) {
-      return 'grid-cols-1'; // Single column for single game
-    }
-    
-    switch (columns) {
-      case 2: return 'grid-cols-1 sm:grid-cols-2';
-      case 3: return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3';
-      case 4: return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
-      case 5: return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
-      default: return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6';
-    }
-  }
-
-  const getSingleGameCardClasses = () => {
-    if (games.length === 1) {
-      return "group relative overflow-hidden rounded-xl bg-white/5 border-transparent hover:bg-white/10 transition-all duration-300 cursor-pointer aspect-video"; // 16:9 aspect ratio for single game
-    }
-    return "group relative overflow-hidden rounded-xl bg-white/5 border-transparent hover:bg-white/10 transition-all duration-300 cursor-pointer";
-  }
-
-  const getImageContainerClasses = () => {
-    if (games.length === 1) {
-      return "relative w-full h-full"; // Full height/width for single game
-    }
-    return "aspect-square relative"; // Square aspect for multiple games
-  }
-
-  const visibleItems = prepareVisibleItems();
-  const showNavigation = shouldShowNavigation();
+    const pages = [];
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
+  };
 
   if (games.length === 0) return null;
 
   return (
-    <div className={`relative w-full ${getContainerClasses()}`}>
-      {showNavigation && (
-        <div className="absolute inset-y-0 z-10 flex items-center justify-between w-full pointer-events-none">
-          <motion.button
-            className="pointer-events-auto bg-white/20 rounded-full p-2 hover:bg-white/30 transition"
-            onClick={() => paginate(-1)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronLeft className="text-white" />
-          </motion.button>
-          <motion.button
-            className="pointer-events-auto bg-white/20 rounded-full p-2 hover:bg-white/30 transition"
-            onClick={() => paginate(1)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronRight className="text-white" />
-          </motion.button>
+    <section className="relative w-full rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-accent/10 p-4 md:p-6 shadow-lg">
+      {/* Top Bar */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          Browse
         </div>
-      )}
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span>{startIndex + 1}-{Math.min(endIndex, games.length)} of {games.length}</span>
+        </div>
+      </div>
 
-      <div className={`grid ${getGridColumns()} gap-4`}>
-        {visibleItems.map((item, index) => (
-          <motion.div
-            key={`${item.type}-${item.type === 'ad' ? item.id : item.game && item.game.id}-${index}`}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.1, ease: "easeInOut" }}
+      {/* Navigation Controls */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center space-x-3">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-10 w-10 rounded-full border-2 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+            onClick={goToPrevPage}
+            disabled={currentPage === 0}
           >
-            {item.type === 'ad' && adSettings ? (
-              <Card className="aspect-square relative overflow-hidden rounded-xl bg-white/5 border-transparent">
-                <AdBanner
-                  pubId={adSettings.google_client_id}
-                  dataAdSlot={adSettings.carousel_ad_slot}
-                  dataAdFormat={adSettings.carousel_ad_format}
-                  dataFullWidthResponsive={adSettings.carousel_ad_full_width}
-                />
-              </Card>
-            ) : (
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-10 w-10 rounded-full border-2 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+            onClick={goToNextPage}
+            disabled={currentPage >= totalPages - 1}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* Dots + Page Jump */}
+        <div className="hidden sm:flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            {getVisiblePages().map((pageIndex) => (
+              <button
+                key={pageIndex}
+                onClick={() => goToPage(pageIndex)}
+                className={`h-2.5 rounded-full transition-all ${
+                  pageIndex === currentPage ? "w-6 bg-primary" : "w-2.5 bg-muted"
+                }`}
+                aria-label={`Go to page ${pageIndex + 1}`}
+              />
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>Page</span>
+            <Input
+              value={pageInput}
+              onChange={(e) => setPageInput(e.target.value.replace(/\D/g, ""))}
+              onBlur={handlePageJump}
+              onKeyDown={(e) => e.key === "Enter" && handlePageJump()}
+              className="h-7 w-12 text-center px-1 bg-background border border-border"
+            />
+            <span>of {totalPages}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Games Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <AnimatePresence mode="popLayout">
+          {currentGames.map((game, index) => (
+            <motion.div
+              key={`${game.id}-${currentPage}`}
+              layout
+              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 10 }}
+              transition={{ duration: 0.3, ease: "easeOut", delay: index * 0.04 }}
+              className="group"
+            >
               <Card 
-                className={getSingleGameCardClasses()}
-                onClick={() => (item.game && openGame(item.game.id))}
+                className="relative overflow-hidden rounded-xl bg-card border border-primary/20 shadow-md hover:shadow-xl hover:border-primary/60 transition-all duration-300 cursor-pointer"
+                onClick={() => openGame(game.id)}
               >
-                {item.game && (
-                  <div className={getImageContainerClasses()}>
-                    <Image
-                      src={item.game.thumbnail_url || '/placeholder.png'}
-                      alt={item.game.name}
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      fill
-                      sizes={games.length === 1 ? "100vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16.6vw"}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 flex flex-col justify-end">
-                      <h3 className={`font-semibold mb-1 line-clamp-2 ${games.length === 1 ? 'text-xl' : 'text-sm'}`}>
-                        {item.game.name}
-                      </h3>
-                      <div className="flex flex-wrap gap-1">
-                        {item.game.categories.slice(0, games.length === 1 ? 3 : 2).map((category, i) => (
-                          <span key={i} className={`bg-white/20 px-2 py-1 rounded-full ${games.length === 1 ? 'text-sm' : 'text-xs'}`}>
-                            {category}
-                          </span>
-                        ))}
-                      </div>
+                {/* Image Container */}
+                <div className="relative aspect-square overflow-hidden bg-muted">
+                  <Image
+                    src={game.thumbnail_url || '/placeholder.png'}
+                    alt={game.name}
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 ease-out"
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16.66vw"
+                  />
+                  
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Play button */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="bg-primary/80 backdrop-blur-sm rounded-full p-3 border border-white/20 shadow-lg">
+                      <Play className="w-4 h-4 text-white fill-current" />
                     </div>
                   </div>
-                )}
+                </div>
+
+                {/* Title */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+                  <h3 className="text-white font-semibold text-sm line-clamp-2 leading-tight drop-shadow-lg">
+                    {game.name}
+                  </h3>
+                </div>
               </Card>
-            )}
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
-    </div>
+    </section>
   )
 }

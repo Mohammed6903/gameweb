@@ -8,18 +8,18 @@ interface footerProps {
 
 export default function Footer({siteName}: footerProps) {
   return (
-    <footer className='bg-gradient-to-br from-purple-600 to-purple-800 w-full py-4 md:py-6'>
+    <footer className="bg-card/95 border-t border-primary/20 w-full py-6 md:py-8 shadow-[0_-8px_30px_rgba(0,0,0,0.06)]">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className='flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6'>
-          <div className='text-white'>
+        <div className='flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8'>
+          <div className='text-foreground'>
             <Link href="/">
-              <h1 className='text-xl font-semibold hover:text-purple-300 transition-colors'>
-                {siteName ?? "Game"} | Browse all games
+              <h1 className='text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors'>
+                {siteName ?? "Game"} • Browse all games
               </h1>
             </Link>
           </div>
 
-          <nav className='text-white flex flex-wrap justify-center gap-4 md:gap-6'>
+          <nav className='text-muted-foreground flex flex-wrap justify-center gap-6 md:gap-8 text-sm'>
             <FooterLink href="/" icon={Home} text="Home" />
             <FooterLink href="/pages/about" icon={Info} text="About Us" />
             <FooterLink href="/pages/contacts" icon={Phone} text="Contact" />
@@ -36,9 +36,9 @@ export default function Footer({siteName}: footerProps) {
 
 function FooterLink({ href, icon: Icon, text }: { href: string, icon: React.ElementType, text: string }) {
   return (
-    <Link href={href} className='flex items-center gap-2 hover:text-purple-300 transition-colors'>
+    <Link href={href} className='flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors'>
       <Icon className='w-4 h-4' />
-      <span className='text-sm font-medium'>{text}</span>
+      <span className='font-medium'>{text}</span>
     </Link>
   )
 }
