@@ -46,7 +46,7 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
       toast.error('Comment cannot be empty!');
       return;
     }
-  
+
     try {
       const { data, error } = await postComment(gameId, newComment);
       if (error) {
@@ -54,12 +54,15 @@ export function CommentSection({ gameId, userId }: CommentSectionProps) {
         console.error(error);
         return;
       }
-  
+
       if (data) {
         console.log('Posted comment:', data); // Debug log
-        setComments([data, ...comments]); 
         setNewComment("");
         toast.success('Comment posted successfully!');
+        
+        // Refetch comments to get proper user data
+        const updatedComments = await fetchComments(gameId);
+        setComments(updatedComments);
       }
     } catch (error) {
       console.error("Failed to post comment:", error);
