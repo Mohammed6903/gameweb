@@ -1,51 +1,50 @@
 import { createClient } from "@/lib/utils/supabase/server";
 import { NextResponse } from "next/server";
 
-// export async function GET(request: Request) {
-//   // The `/auth/callback` route is required for the server-side auth flow implemented
-//   // by the SSR package. It exchanges an auth code for the user's session.
-//   // https://supabase.com/docs/guides/auth/server-side/nextjs
-//   const requestUrl = new URL(request.url);
-//   const code = requestUrl.searchParams.get("code");
-//   const origin = requestUrl.origin;
-//   const redirectTo = requestUrl.searchParams.get("redirect_to")?.toString();
-
-//   if (code) {
-//     const supabase = await createClient();
-//     await supabase.auth.exchangeCodeForSession(code);
-//   }
-
-//   if (redirectTo) {
-//     return NextResponse.redirect(`${origin}${redirectTo}`);
-//   }
-
-//   // URL to redirect to after sign up process completes
-//   return NextResponse.redirect(`${origin}/admin`);
-// }
-
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/'
+  const token_hash = searchParams.get('token_hash')
+  const type = searchParams.get('type')
+  const next = searchParams.get('next') ?? searchParams.get('redirect_to') ?? '/'
+
+  const forwardedHost = request.headers.get('x-forwarded-host')
+  const isLocalEnv = process.env.NODE_ENV === 'development'
+
+  const getRedirectUrl = (path: string) => {
+    if (isLocalEnv) {
+      return `${origin}${path}`
+    } else if (forwardedHost) {
+      return `https://${forwardedHost}${path}`
+    } else {
+      return `${origin}${path}`
+    }
+  }
+
+  if (token_hash && type) {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.verifyOtp({
+      type: type as any,
+      token_hash,
+    })
+    
+    if (!error) {
+      // For password recovery, always redirect to reset-password page
+      if (type === 'recovery') {
+        return NextResponse.redirect(getRedirectUrl('/reset-password'))
+      }
+      return NextResponse.redirect(getRedirectUrl(next))
+    }
+  }
 
   if (code) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
-      }
+      return NextResponse.redirect(getRedirectUrl(next))
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+  return NextResponse.redirect(getRedirectUrl('/auth/auth-code-error'))
 }
