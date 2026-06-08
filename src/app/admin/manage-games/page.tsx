@@ -143,9 +143,9 @@ export default function ManageGamesPage() {
                           <span
                             className={`
                               px-3 py-1 rounded-full text-xs font-semibold
-                              ${game.is_active 
-                                ? "bg-green-500/15 text-green-600 dark:text-green-400" 
-                                : "bg-red-500/15 text-red-600 dark:text-red-400"
+                              ${game.is_active
+                                ? "bg-[oklch(0.85_0.20_130)]/15 text-[oklch(0.85_0.20_130)]"
+                                : "bg-destructive/15 text-destructive"
                             }
                           `}
                           >

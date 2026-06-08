@@ -61,8 +61,8 @@ export default function ClientCategoryPage({ category, gameProp, totalProp, hand
               </p>
             </div>
             {/* <div className="flex items-center space-x-4">
-              <Button onClick={() => setIsFilterModalOpen(true)} variant="outline" className="gap-2 text-gray-300 hover:text-white hover:bg-white/10">
-                <Filter className="size-5 text-purple-500" />
+              <Button onClick={() => setIsFilterModalOpen(true)} variant="outline" className="gap-2 text-muted-foreground hover:text-foreground hover:bg-white/10">
+                <Filter className="size-5 text-primary" />
                 Filters
               </Button>
               <FilterModal

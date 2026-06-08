@@ -189,7 +189,7 @@ export function GameSearch() {
 
       {/* Search Results Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-950 rounded-lg shadow-2xl border border-border overflow-hidden z-50">          
+        <div className="absolute top-full left-0 right-0 mt-2 bg-popover rounded-lg shadow-2xl border border-border overflow-hidden z-50">          
           <div className="max-h-[500px] overflow-y-auto">
             <div className="p-2">
               {/* Loading State */}

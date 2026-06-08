@@ -37,7 +37,7 @@ export function Pagination({ currentPage, totalPages, baseUrl, setCurrentPage }:
           <Button 
             variant="outline" 
             size="icon" 
-            className="text-gray-300 hover:text-white hover:bg-white/10"
+            className="text-muted-foreground hover:text-foreground hover:bg-white/10"
             onClick={() => setCurrentPage(currentPage - 1)}
           >
             <ChevronLeft className="size-5" />
@@ -49,9 +49,9 @@ export function Pagination({ currentPage, totalPages, baseUrl, setCurrentPage }:
           <Button
             variant={page === currentPage ? "default" : "outline"}
             className={`
-              ${page === currentPage 
-                ? 'bg-violet-600 text-white' 
-                : 'text-gray-300 hover:text-white hover:bg-white/10'}
+              ${page === currentPage
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/10'}
             `}
             onClick={() => setCurrentPage(page)}
             key={page}
@@ -65,7 +65,7 @@ export function Pagination({ currentPage, totalPages, baseUrl, setCurrentPage }:
           <Button 
             variant="outline" 
             size="icon" 
-            className="text-gray-300 hover:text-white hover:bg-white/10"
+            className="text-muted-foreground hover:text-foreground hover:bg-white/10"
             onClick={() => setCurrentPage(currentPage + 1)}
           >
             <ChevronRight className="size-5" />

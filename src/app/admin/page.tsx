@@ -124,7 +124,7 @@ const GameAnalyticsDashboard = () => {
   if (error) {
     return (
       <div className="text-center p-6">
-        <p className="text-red-400">Error loading dashboard data. Please try again later.</p>
+        <p className="text-destructive">Error loading dashboard data. Please try again later.</p>
       </div>
     )
   }

@@ -23,7 +23,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
   };
 
   return (
-    <div className="space-y-2 border-b border-gray-200 pb-4 mb-4">
+    <div className="space-y-2 border-b border-border pb-4 mb-4">
       <h3 className="text-lg font-semibold text-white capitalize">{adType} Ads</h3>
       <div className="flex items-center justify-between">
         <Label htmlFor={`show-${adType}-ads`} className="text-white">Show {adType} Ads</Label>
@@ -31,7 +31,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
           id={`show-${adType}-ads`}
           checked={settings.show}
           onCheckedChange={(checked) => updateSetting('show', checked)}
-          className="bg-gray-500"
+          className="bg-muted"
         />
       </div>
       {settings.frequency !== undefined && (
@@ -43,7 +43,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
             value={settings.frequency}
             onChange={(e) => updateSetting('frequency', parseInt(e.target.value))}
             placeholder="Enter frequency"
-            className="border-gray-300"
+            className="border-input"
           />
         </div>
       )}
@@ -60,7 +60,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
               onSettingsChange({ ...settings, count: parseInt(e.target.value, 10) || 0 })
             }
             placeholder="Enter ad count"
-            className="border-gray-300"
+            className="border-input"
           />
         </div>
       )}
@@ -71,7 +71,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
           value={settings.slot}
           onChange={(e) => updateSetting('slot', e.target.value)}
           placeholder="Enter ad slot"
-          className="border-gray-300"
+          className="border-input"
         />
       </div>
       <div className="flex flex-col space-y-2">
@@ -81,7 +81,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
           value={settings.format}
           onChange={(e) => updateSetting('format', e.target.value)}
           placeholder="Enter ad format"
-          className="border-gray-300"
+          className="border-input"
         />
       </div>
       <div className="flex items-center justify-between">
@@ -90,7 +90,7 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
           id={`${adType}-ad-full-width`}
           checked={settings.fullWidth}
           onCheckedChange={(checked) => updateSetting('fullWidth', checked)}
-          className="bg-gray-500"
+          className="bg-muted"
         />
       </div>
     </div>

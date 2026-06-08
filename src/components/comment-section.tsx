@@ -48,22 +48,22 @@ export function CommentSection({ gameId }: CommentSectionProps) {
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="bg-white/5 border-purple-700 focus:border-purple-500"
+          className="bg-white/5 border-input focus:border-primary"
         />
         <Input
           placeholder="Email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="bg-white/5 border-purple-700 focus:border-purple-500"
+          className="bg-white/5 border-input focus:border-primary"
         />
         <Textarea
           placeholder="Your comment"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="bg-white/5 border-purple-700 focus:border-purple-500 min-h-[100px]"
+          className="bg-white/5 border-input focus:border-primary min-h-[100px]"
         />
-        <Button type="submit" className="w-full bg-purple-700 hover:bg-purple-800">
+        <Button type="submit" variant="neon" className="w-full">
           Submit Comment
         </Button>
       </form>
@@ -76,9 +76,9 @@ export function CommentSection({ gameId }: CommentSectionProps) {
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">{comment.name}</h3>
-                <span className="text-xs text-gray-400">{new Date(comment.createdAt).toLocaleString()}</span>
+                <span className="text-xs text-muted-foreground">{new Date(comment.createdAt).toLocaleString()}</span>
               </div>
-              <p className="mt-1 text-gray-300">{comment.message}</p>
+              <p className="mt-1 text-foreground">{comment.message}</p>
             </div>
           </div>
         ))}
