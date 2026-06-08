@@ -105,15 +105,17 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-primary/20 bg-card/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+    <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md shadow-[0_8px_30px_oklch(0_0_0/0.4)]">
       <nav className="flex flex-wrap items-center justify-between h-16 w-full px-6">
         <div className="flex items-center gap-3">
           <SidebarTrigger className="text-muted-foreground hover:text-foreground transition-colors" />
           <Link href="/" className="flex items-center gap-3">
-            <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+            <div className="size-9 rounded-lg flex items-center justify-center bg-gradient-to-br from-[oklch(0.55_0.25_290)] to-accent shadow-[0_0_16px_oklch(var(--accent)/0.6)]">
               <img src={favIcon?.publicUrl ? favIcon?.publicUrl : '/favicon.ico'} alt="icon" className="size-5" />
             </div>
-            <span className="font-semibold text-foreground text-lg">{siteName ? siteName : process.env.NEXT_PUBLIC_SITE_NAME}</span>
+            <span className="font-display font-extrabold tracking-wide text-lg bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
+              {siteName ? siteName : process.env.NEXT_PUBLIC_SITE_NAME}
+            </span>
           </Link>
         </div>
         
@@ -180,9 +182,10 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button 
-              size="sm" 
-              className="hidden sm:inline-flex ml-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors"
+            <Button
+              variant="neon"
+              size="sm"
+              className="hidden sm:inline-flex ml-1.5"
               onClick={() => router.push('/sign-in')}
             >
               Sign In
