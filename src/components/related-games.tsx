@@ -35,7 +35,7 @@ export async function RelatedGames({ categories, currentGameId }: RelatedGamesPr
             />
             <div>
               <h3 className="font-semibold">{game.name}</h3>
-              <p className="text-sm text-gray-400">{game.categories.join(', ')}</p>
+              <p className="text-sm text-muted-foreground">{game.categories.join(', ')}</p>
             </div>
           </div>
         </Link>

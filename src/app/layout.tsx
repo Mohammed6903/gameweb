@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
 import React from "react";
-import localFont from "next/font/local";
+import { Orbitron, Chakra_Petch } from "next/font/google";
 import "./globals.css";
 import { getFavIcons, getMeta } from "@/lib/controllers/meta";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { getAllHeadScripts, getAllScripts } from "@/lib/controllers/ads";
 import DynamicScripts from "@/components/adSense/dynamic-scripts";
-import { ThemeProvider } from "@/components/theme/theme-provider";
 
 // Font definitions
-const geistSans = localFont({
-  src: "fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const fontDisplay = Orbitron({
+  subsets: ["latin"],
+  weight: ["500", "700", "900"],
+  variable: "--font-display",
+  display: "swap",
 });
 
-const geistMono = localFont({
-  src: "fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const fontSans = Chakra_Petch({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
 // Favicon type definition
@@ -127,17 +128,15 @@ export default async function RootLayout({
       : [];
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         {/* Metadata is dynamically injected */}
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${fontDisplay.variable} ${fontSans.variable} font-sans antialiased`}>
         {/* Inject Ads dynamically */}
         <DynamicScripts headScripts={headData} adsData={adsData} />
-        <ThemeProvider defaultTheme="system" storageKey="gameweb-theme">
-          {/* Main Application Content */}
-          {children}
-        </ThemeProvider>
+        {/* Main Application Content */}
+        {children}
         {/* Google Analytics */}
         <GoogleAnalytics gaId="G-0TVV790ZXC" />
       </body>

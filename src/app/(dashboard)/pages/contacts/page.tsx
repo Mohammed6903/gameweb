@@ -84,9 +84,9 @@ export default async function ContactPage({
           <p className="mb-4 text-muted-foreground">{contactInfo.formDescription}</p>
           
           {success && (
-            <div className="mb-4 p-4 bg-green-500/10 border border-green-500/50 rounded-lg flex items-start gap-3">
-              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-              <p className="text-green-500 text-sm">
+            <div className="mb-4 p-4 bg-[oklch(0.85_0.20_130)]/10 border border-[oklch(0.85_0.20_130)]/50 rounded-lg flex items-start gap-3">
+              <CheckCircle className="h-5 w-5 text-[oklch(0.85_0.20_130)] flex-shrink-0 mt-0.5" />
+              <p className="text-[oklch(0.85_0.20_130)] text-sm">
                 Thank you for your message! We'll get back to you soon.
               </p>
             </div>

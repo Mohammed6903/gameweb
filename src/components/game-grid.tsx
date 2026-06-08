@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { FetchedGameData } from '@/types/games'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -32,7 +32,7 @@ export function GameGrid({ games }: GameGridProps) {
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
             <Card
-              className={`group relative overflow-hidden rounded-xl bg-white/5 border-transparent hover:bg-white/10 transition-all duration-300 cursor-pointer ${cardSize}`}
+              className={`group relative overflow-hidden rounded-xl bg-card border border-border neon-border-hover cursor-pointer ${cardSize}`}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => openGame(game.id)}
@@ -47,7 +47,7 @@ export function GameGrid({ games }: GameGridProps) {
                 />
               </div>
               {game.tags && game.tags.length > 0 && (
-                <span className={`absolute top-2 right-2 bg-violet-600 text-xs font-medium px-2 py-1 rounded-full`}>
+                <span className={`absolute top-2 right-2 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full shadow-[0_0_12px_oklch(var(--primary)/0.6)]`}>
                   {game.tags[0]}
                 </span>
               )}
@@ -57,18 +57,18 @@ export function GameGrid({ games }: GameGridProps) {
                 animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <h3 className={`font-semibold mb-1 line-clamp-2`}>{game.name}</h3>
+                <h3 className={`font-semibold mb-1 line-clamp-2 text-white`}>{game.name}</h3>
                 {isFeatured && (
-                  <p className="text-sm text-gray-300 line-clamp-2 mb-2">{game.description}</p>
+                  <p className="text-sm text-zinc-200 line-clamp-2 mb-2">{game.description}</p>
                 )}
                 <div className="flex flex-wrap gap-1 mb-2">
                   {game.categories.slice(0, 2).map((category, i) => (
-                    <span key={i} className={`text-xs bg-white/20 px-2 py-1 rounded-full`}>
+                    <span key={i} className={`text-xs bg-white/15 backdrop-blur-sm px-2 py-1 rounded-full`}>
                       {category}
                     </span>
                   ))}
                 </div>
-                <button className={`bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition-colors duration-300 py-2 px-4 text-sm`}>
+                <button className={`bg-primary hover:bg-primary/90 text-primary-foreground font-display font-bold shadow-[0_0_16px_oklch(var(--primary)/0.5)] rounded-full transition-colors duration-300 py-2 px-4 text-sm`}>
                   Play Now
                 </button>
               </motion.div>

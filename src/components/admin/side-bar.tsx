@@ -3,10 +3,10 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Home, 
-  PlusCircle, 
-  List, 
+import {
+  Home,
+  PlusCircle,
+  List,
   Settings,
   Menu,
   Edit,
@@ -20,59 +20,35 @@ export function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const navItems = [
-    { 
-      href: '/admin', 
-      icon: Home, 
+    {
+      href: '/admin',
+      icon: Home,
       label: 'Dashboard',
-      activeColor: 'text-emerald-500',
-      activeBackground: 'bg-emerald-50',
-      hoverColor: 'hover:text-emerald-600',
-      hoverBackground: 'hover:bg-emerald-100'
     },
-    { 
-      href: '/admin/add-game', 
-      icon: PlusCircle, 
+    {
+      href: '/admin/add-game',
+      icon: PlusCircle,
       label: 'Add New Game',
-      activeColor: 'text-purple-500',
-      activeBackground: 'bg-purple-50',
-      hoverColor: 'hover:text-purple-600',
-      hoverBackground: 'hover:bg-purple-100'
     },
-    { 
-      href: '/admin/manage-games', 
-      icon: List, 
+    {
+      href: '/admin/manage-games',
+      icon: List,
       label: 'Manage Games',
-      activeColor: 'text-blue-500',
-      activeBackground: 'bg-blue-50',
-      hoverColor: 'hover:text-blue-600',
-      hoverBackground: 'hover:bg-blue-100'
     },
-    { 
-      href: '/admin/import-games', 
-      icon: DatabaseBackup, 
+    {
+      href: '/admin/import-games',
+      icon: DatabaseBackup,
       label: 'Import Games',
-      activeColor: 'text-teal-500',
-      activeBackground: 'bg-teal-50',
-      hoverColor: 'hover:text-teal-600',
-      hoverBackground: 'hover:bg-teal-100'
     },
-    { 
-      href: '/admin/settings', 
-      icon: Settings, 
+    {
+      href: '/admin/settings',
+      icon: Settings,
       label: 'Settings',
-      activeColor: 'text-orange-500',
-      activeBackground: 'bg-orange-50',
-      hoverColor: 'hover:text-orange-600',
-      hoverBackground: 'hover:bg-orange-100'
     },
-    { 
-      href: '/admin/edit-pages', 
-      icon: Edit, 
+    {
+      href: '/admin/edit-pages',
+      icon: Edit,
       label: 'Edit Pages',
-      activeColor: 'text-red-500',
-      activeBackground: 'bg-red-50',
-      hoverColor: 'hover:text-red-600',
-      hoverBackground: 'hover:bg-red-100'
     }
   ];
 
@@ -83,25 +59,25 @@ export function Sidebar() {
         const isActive = pathname === item.href;
 
         return (
-          <Link 
+          <Link
             key={item.href}
             href={item.href}
             className={`
               flex items-center px-4 py-3 rounded-lg transition-all duration-200 group relative
-              ${isActive 
-                ? 'bg-primary text-primary-foreground shadow-md' 
+              ${isActive
+                ? 'bg-[linear-gradient(90deg,oklch(0.55_0.25_290/0.25),transparent)] text-foreground shadow-[inset_3px_0_0_oklch(var(--primary))]'
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }
             `}
           >
-            <Icon 
-              className={`mr-3 h-5 w-5 transition-all duration-200 
-                ${isActive ? 'text-primary-foreground' : 'group-hover:text-foreground'}
+            <Icon
+              className={`mr-3 h-5 w-5 transition-all duration-200
+                ${isActive ? 'text-primary' : 'group-hover:text-foreground'}
               `}
             />
             <span className="text-sm font-medium">{item.label}</span>
             {isActive && (
-              <div className="absolute right-3 w-1.5 h-1.5 bg-primary-foreground rounded-full" />
+              <div className="absolute right-3 w-1.5 h-1.5 bg-primary shadow-[0_0_8px_oklch(var(--primary)/0.8)] rounded-full" />
             )}
           </Link>
         );
@@ -113,12 +89,12 @@ export function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <aside className="
-        hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 
-        bg-card border-r border-border p-6 
+        hidden lg:flex flex-col fixed left-0 top-0 h-full w-64
+        bg-card border-r border-border p-6
         overflow-y-auto z-40 shadow-sm
       ">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-foreground">Admin</h2>
+          <h2 className="text-2xl font-bold text-foreground font-display text-glow-cyan">Admin</h2>
           <p className="text-xs text-muted-foreground mt-1">Dashboard</p>
         </div>
         <div className="flex-1">
@@ -133,10 +109,9 @@ export function Sidebar() {
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button 
-              variant="default"
+            <Button
+              variant="neon"
               size="icon"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Menu className="h-5 w-5" />
             </Button>
@@ -144,7 +119,7 @@ export function Sidebar() {
           <SheetContent side="left" className="w-64 bg-card border-border p-0">
             <div className="flex flex-col h-full p-6">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-foreground">Admin</h2>
+                <h2 className="text-2xl font-bold text-foreground font-display text-glow-cyan">Admin</h2>
                 <p className="text-xs text-muted-foreground mt-1">Dashboard</p>
               </div>
               <div className="flex-1">

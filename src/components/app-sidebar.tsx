@@ -58,7 +58,7 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
     >
       <SidebarHeader className="h-16 flex items-center justify-center border-b border-border px-4">
         <h1 className={`
-          text-lg font-bold text-foreground
+          text-lg font-bold text-foreground font-display tracking-wide text-glow-cyan
           transition-opacity duration-300
         `}>
           {siteName ? siteName : process.env.NEXT_PUBLIC_SITE_NAME}
@@ -78,10 +78,9 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton asChild>
                     <a href={item.url} className="
-                      flex items-center gap-3 py-2.5 px-4 
-                      rounded-md hover:bg-muted
-                      transition-colors duration-200
-                      text-muted-foreground hover:text-foreground
+                      flex items-center gap-3 py-2.5 px-4
+                      rounded-md hover:bg-[linear-gradient(90deg,oklch(0.55_0.25_290/0.22),transparent)] hover:shadow-[inset_3px_0_0_oklch(var(--primary))]
+                      text-muted-foreground hover:text-foreground rounded-md transition-all duration-200
                     ">
                       <item.icon className="size-5 flex-shrink-0" />
                       <span className={`
@@ -110,10 +109,9 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
                 <SidebarMenuItem key={item.category}>
                   <SidebarMenuButton asChild>
                     <a href={`/categories/${item.category}`} className="
-                      flex items-center justify-between py-2.5 px-4 
-                      rounded-md hover:bg-muted
-                      transition-colors duration-200
-                      text-muted-foreground hover:text-foreground
+                      flex items-center justify-between py-2.5 px-4
+                      rounded-md hover:bg-[linear-gradient(90deg,oklch(0.55_0.25_290/0.22),transparent)] hover:shadow-[inset_3px_0_0_oklch(var(--primary))]
+                      text-muted-foreground hover:text-foreground rounded-md transition-all duration-200
                       group text-sm
                     ">
                       <span className={`
@@ -122,8 +120,7 @@ export const AppSideBar: React.FC<sidebarProps> = ({siteName}) => {
                         {capitalizeCategory(item.category)}
                       </span>
                       <span className={`
-                        text-xs bg-muted px-2 py-0.5 rounded
-                        text-muted-foreground group-hover:text-accent transition-all duration-300
+                        text-xs bg-muted px-2 py-0.5 rounded text-primary border border-border
                       `}>
                         {item.count}
                       </span>

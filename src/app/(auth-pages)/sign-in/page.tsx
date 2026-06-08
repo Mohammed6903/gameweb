@@ -38,7 +38,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           <form className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground/80">Email</Label>
-              <Input name="email" placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring" autoComplete="on" style={{color: "black"}}/>
+              <Input name="email" placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" autoComplete="on"/>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -55,9 +55,8 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                 name="password"
                 placeholder="Your password"
                 required
-                className="bg-background/60 border-border/60 focus-visible:ring-ring"
+                className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground"
                 autoComplete="on"
-                style={{color: "black"}}
               />
             </div>
             <SubmitButton

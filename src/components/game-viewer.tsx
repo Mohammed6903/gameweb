@@ -60,13 +60,14 @@ export function GameViewer({ play_url, thumbnail, game_id }: GameViewerProps) {
               className="object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-              <span className="text-gray-400">No thumbnail available</span>
+            <div className="w-full h-full bg-muted flex items-center justify-center">
+              <span className="text-muted-foreground">No thumbnail available</span>
             </div>
           )}
           <Button
             onClick={async () => await onPlay()}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700"
+            variant="neon"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             size="lg"
           >
             Play

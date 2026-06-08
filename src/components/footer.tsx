@@ -8,12 +8,13 @@ interface footerProps {
 
 export default function Footer({siteName}: footerProps) {
   return (
-    <footer className="bg-card/95 border-t border-primary/20 w-full py-6 md:py-8 shadow-[0_-8px_30px_rgba(0,0,0,0.06)]">
+    <footer className="relative bg-card/95 border-t border-border w-full py-6 md:py-8 shadow-[0_-8px_30px_oklch(0_0_0/0.4)]">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className='flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8'>
           <div className='text-foreground'>
             <Link href="/">
-              <h1 className='text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors'>
+              <h1 className='text-sm font-semibold font-display text-muted-foreground hover:text-foreground transition-colors'>
                 {siteName ?? "Game"} • Browse all games
               </h1>
             </Link>
@@ -36,7 +37,7 @@ export default function Footer({siteName}: footerProps) {
 
 function FooterLink({ href, icon: Icon, text }: { href: string, icon: React.ElementType, text: string }) {
   return (
-    <Link href={href} className='flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors'>
+    <Link href={href} className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors'>
       <Icon className='w-4 h-4' />
       <span className='font-medium'>{text}</span>
     </Link>

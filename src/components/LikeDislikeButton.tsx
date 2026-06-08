@@ -52,7 +52,7 @@ export function LikeDislikeButtons({ gameId, userId }: LikeDislikeButtonsProps) 
         onClick={likeHandler}
         variant="outline"
         size="icon"
-        className={`text-black bg-white hover:bg-purple-700 hover:text-white ${like ? "bg-purple-700 text-white" : ""}`}
+        className={`text-foreground bg-card hover:bg-primary hover:text-primary-foreground ${like ? "bg-primary text-primary-foreground" : ""}`}
         aria-label="Like game"
       >
         <ThumbsUp className="h-5 w-5" aria-hidden="true" />
@@ -61,7 +61,7 @@ export function LikeDislikeButtons({ gameId, userId }: LikeDislikeButtonsProps) 
         onClick={dislikeHandler}
         variant="outline"
         size="icon"
-        className={`text-black bg-white hover:bg-purple-700 hover:text-white ${(like === false) ? "bg-purple-700 text-white" : ""}`}
+        className={`text-foreground bg-card hover:bg-primary hover:text-primary-foreground ${(like === false) ? "bg-primary text-primary-foreground" : ""}`}
         aria-label="Dislike game"
       >
         <ThumbsDown className="h-5 w-5" aria-hidden="true" />

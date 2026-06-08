@@ -23,33 +23,33 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
   };
 
   return (
-    <div className="space-y-2 border-b border-gray-200 pb-4 mb-4">
-      <h3 className="text-lg font-semibold text-white capitalize">{adType} Ads</h3>
+    <div className="space-y-2 border-b border-border pb-4 mb-4">
+      <h3 className="text-lg font-semibold text-foreground capitalize">{adType} Ads</h3>
       <div className="flex items-center justify-between">
-        <Label htmlFor={`show-${adType}-ads`} className="text-white">Show {adType} Ads</Label>
+        <Label htmlFor={`show-${adType}-ads`} className="text-foreground">Show {adType} Ads</Label>
         <Switch
           id={`show-${adType}-ads`}
           checked={settings.show}
           onCheckedChange={(checked) => updateSetting('show', checked)}
-          className="bg-gray-500"
+          className="bg-muted"
         />
       </div>
       {settings.frequency !== undefined && (
         <div className="flex flex-col space-y-2">
-          <Label htmlFor={`${adType}-ad-frequency`} className="text-white">Ad Frequency</Label>
+          <Label htmlFor={`${adType}-ad-frequency`} className="text-foreground">Ad Frequency</Label>
           <Input
             id={`${adType}-ad-frequency`}
             type="number"
             value={settings.frequency}
             onChange={(e) => updateSetting('frequency', parseInt(e.target.value))}
             placeholder="Enter frequency"
-            className="border-gray-300"
+            className="border-input"
           />
         </div>
       )}
       {adType === "sidebar" && (
         <div>
-          <Label htmlFor={`${adType}_ad_count`} className="text-white">
+          <Label htmlFor={`${adType}_ad_count`} className="text-foreground">
             {adType.charAt(0).toUpperCase() + adType.slice(1)} Ad Count
           </Label>
           <Input
@@ -60,37 +60,37 @@ export function AdTypeSettings({ adType, settings, onSettingsChange }: AdTypeSet
               onSettingsChange({ ...settings, count: parseInt(e.target.value, 10) || 0 })
             }
             placeholder="Enter ad count"
-            className="border-gray-300"
+            className="border-input"
           />
         </div>
       )}
       <div className="flex flex-col space-y-2">
-        <Label htmlFor={`${adType}-ad-slot`} className="text-white">Ad Slot</Label>
+        <Label htmlFor={`${adType}-ad-slot`} className="text-foreground">Ad Slot</Label>
         <Input
           id={`${adType}-ad-slot`}
           value={settings.slot}
           onChange={(e) => updateSetting('slot', e.target.value)}
           placeholder="Enter ad slot"
-          className="border-gray-300"
+          className="border-input"
         />
       </div>
       <div className="flex flex-col space-y-2">
-        <Label htmlFor={`${adType}-ad-format`} className="text-white">Ad Format</Label>
+        <Label htmlFor={`${adType}-ad-format`} className="text-foreground">Ad Format</Label>
         <Input
           id={`${adType}-ad-format`}
           value={settings.format}
           onChange={(e) => updateSetting('format', e.target.value)}
           placeholder="Enter ad format"
-          className="border-gray-300"
+          className="border-input"
         />
       </div>
       <div className="flex items-center justify-between">
-        <Label htmlFor={`${adType}-ad-full-width`} className="text-white">Ad Full Width</Label>
+        <Label htmlFor={`${adType}-ad-full-width`} className="text-foreground">Ad Full Width</Label>
         <Switch
           id={`${adType}-ad-full-width`}
           checked={settings.fullWidth}
           onCheckedChange={(checked) => updateSetting('fullWidth', checked)}
-          className="bg-gray-500"
+          className="bg-muted"
         />
       </div>
     </div>

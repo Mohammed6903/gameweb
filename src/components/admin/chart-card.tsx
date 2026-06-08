@@ -5,7 +5,7 @@ import type { ApexOptions } from "apexcharts"
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
-  loading: () => <div className="h-[300px] animate-pulse bg-gray-700 rounded-lg" />,
+  loading: () => <div className="h-[300px] animate-pulse bg-muted rounded-lg" />,
 })
 
 export const ChartCard = memo(
@@ -34,21 +34,21 @@ export const ChartCard = memo(
       },
       grid: {
         ...options.grid,
-        borderColor: "var(--color-border)",
+        borderColor: "#2a1c52",
       },
       legend: {
         ...options.legend,
         labels: {
           ...options.legend?.labels,
-          colors: "var(--color-foreground)",
+          colors: "#e8e5f5",
         },
       },
     }
 
     return (
-      <Card className="bg-card border-border shadow-sm">
+      <Card className="bg-card border border-border shadow-[0_0_24px_oklch(0.55_0.25_290/0.12)]">
         <CardHeader className="border-b border-border">
-          <CardTitle className="text-lg font-semibold text-foreground">{title}</CardTitle>
+          <CardTitle className="text-lg font-semibold text-foreground font-display">{title}</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <Chart options={themeOptions} series={series} type={type} height={300} />

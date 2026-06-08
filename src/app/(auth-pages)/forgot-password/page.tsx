@@ -31,7 +31,7 @@ export default async function ForgotPassword(props: {
           <form className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground/80">Email</Label>
-              <Input name="email" placeholder="you@example.com" required style={{color: "black"}} className="bg-background/60 border-border/60 focus-visible:ring-ring" />
+              <Input name="email" placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
             </div>
             <SubmitButton
               formAction={forgotPasswordAction}
