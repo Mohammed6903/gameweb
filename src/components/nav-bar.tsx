@@ -9,8 +9,7 @@ import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/utils/supabase/client"
 import { GameSearch } from "./game-search"
-import { ThemeToggle } from "./theme/theme-toggle"
-import {  
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -133,9 +132,6 @@ export const NavBar: React.FC<NavBarprops> = ({siteName}) => {
           >
             <Search className="size-5" />
           </Button>
-
-          {/* Theme Toggle Added Here */}
-          <ThemeToggle />
 
           <DropdownMenu open={isLikedGamesOpen} onOpenChange={setIsLikedGamesOpen}>
             <DropdownMenuTrigger asChild>
