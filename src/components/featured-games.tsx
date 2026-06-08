@@ -40,13 +40,13 @@ function GameCard({ game, index, isMobile = false, onGameClick, onHover }: GameC
       className="group h-full"
     >
       <Card
-        className="relative h-full overflow-hidden rounded-2xl bg-card border border-primary/20 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
+        className="relative h-full overflow-hidden rounded-2xl bg-card border border-border neon-border-hover shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
         onMouseEnter={() => onHover?.(index)}
         onMouseLeave={() => onHover?.(null)}
         onClick={() => onGameClick(game.id)}
       >
         {/* Top Glow */}
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/20 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-accent/20 via-transparent to-transparent pointer-events-none" />
 
         {/* Image Container */}
         <div className="relative w-full aspect-[4/3] overflow-hidden">
@@ -62,7 +62,7 @@ function GameCard({ game, index, isMobile = false, onGameClick, onHover }: GameC
 
           {/* Featured Badge */}
           <div className="absolute top-4 left-4">
-            <Badge className="bg-primary/90 text-primary-foreground border-0 shadow-lg backdrop-blur-sm">
+            <Badge className="bg-primary text-primary-foreground border-0 shadow-[0_0_12px_oklch(var(--primary)/0.6)] backdrop-blur-sm">
               <Sparkles className="w-3.5 h-3.5 mr-1.5" />
               Featured
             </Badge>
@@ -81,7 +81,7 @@ function GameCard({ game, index, isMobile = false, onGameClick, onHover }: GameC
           )}
 
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-            <div className="bg-primary/90 backdrop-blur-sm rounded-full p-4 shadow-2xl border border-white/20">
+            <div className="bg-primary backdrop-blur-sm rounded-full p-4 shadow-[0_0_20px_oklch(var(--primary)/0.6)] border border-white/20">
               <Play className="w-6 h-6 text-primary-foreground fill-current" />
             </div>
           </div>
@@ -90,7 +90,7 @@ function GameCard({ game, index, isMobile = false, onGameClick, onHover }: GameC
         {/* Content */}
         <CardContent className="p-6">
           <div>
-            <h3 className="text-xl font-extrabold text-foreground mb-2 line-clamp-1 group-hover:text-primary transition-colors duration-300">
+            <h3 className="text-xl font-extrabold font-display text-foreground mb-2 line-clamp-1 group-hover:text-primary group-hover:text-glow-cyan transition-colors duration-300">
               {game.name}
             </h3>
             <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed mb-4">
