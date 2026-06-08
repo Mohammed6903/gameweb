@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Bell, Heart, Search, Menu, LogOut } from 'lucide-react'
+import { Heart, Search, Menu, LogOut } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { SidebarTrigger } from "@/components/ui/sidebar"

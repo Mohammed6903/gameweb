@@ -34,13 +34,13 @@ export const ChartCard = memo(
       },
       grid: {
         ...options.grid,
-        borderColor: "var(--color-border)",
+        borderColor: "#2a1c52",
       },
       legend: {
         ...options.legend,
         labels: {
           ...options.legend?.labels,
-          colors: "var(--color-foreground)",
+          colors: "#e8e5f5",
         },
       },
     }

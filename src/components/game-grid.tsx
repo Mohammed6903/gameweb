@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { FetchedGameData } from '@/types/games'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
