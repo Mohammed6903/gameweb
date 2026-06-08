@@ -77,18 +77,17 @@ export default function Signup(props: {
                   name="firstName" 
                   placeholder="John" 
                   required 
-                  className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" 
-                  style={{color: "black"}}
+                  className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground"
                 />              
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName" className="text-foreground/80">Last Name</Label>
-                <Input id="lastName" name="lastName" style={{color: "black"}} placeholder="Doe" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
+                <Input id="lastName" name="lastName" placeholder="Doe" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground/80">Email</Label>
-              <Input id="email" name="email" type="email" style={{color: "black"}} placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
+              <Input id="email" name="email" type="email" placeholder="you@example.com" required className="bg-background/60 border-border/60 focus-visible:ring-ring text-foreground" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground/80">Password</Label>
@@ -100,7 +99,6 @@ export default function Signup(props: {
                   placeholder="Your password"
                   minLength={6}
                   required
-                  style={{color: "black"}}
                   className="bg-background/60 border-border/60 focus-visible:ring-ring pr-10 text-foreground"
                 />
                 <Button
@@ -125,7 +123,6 @@ export default function Signup(props: {
                   placeholder="Confirm your password"
                   minLength={6}
                   required
-                  style={{color: "black"}}
                   className="bg-background/60 border-border/60 focus-visible:ring-ring pr-10 text-foreground"
                 />
                 <Button
