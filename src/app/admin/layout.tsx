@@ -21,14 +21,14 @@ export default async function Layout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-900 text-gray-100">
+    <div className="flex h-screen bg-background text-foreground">
       {/* Sidebar */}
-      <div className="bg-gray-800 border-r border-gray-700">
+      <div className="bg-card border-r border-border">
         <Sidebar />
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 bg-gray-900 hide-scrollbar">{children}</main>
+      <main className="flex-1 bg-background hide-scrollbar">{children}</main>
     </div>
   )
 }
