@@ -3,75 +3,49 @@
 @tailwind utilities;
 
 :root {
-  /* Light mode - sporty, high contrast */
-  --background: 0.98 0.01 250;
-  --foreground: 0.12 0.02 250;
-  --card: 0.96 0.01 250;
-  --card-foreground: 0.12 0.02 250;
-  --popover: 0.98 0.01 250;
-  --popover-foreground: 0.12 0.02 250;
+  /* Arcade Neon — single dark palette (no light mode) */
+  --background: 0.10 0.04 285;
+  --foreground: 0.95 0.02 285;
+  --card: 0.16 0.05 285;
+  --card-foreground: 0.95 0.02 285;
+  --popover: 0.16 0.05 285;
+  --popover-foreground: 0.95 0.02 285;
 
-  /* Electric blue + neon lime accents */
-  --primary: 0.65 0.23 255;
-  --primary-foreground: 0.98 0 0;
-  --secondary: 0.83 0.17 145;
-  --secondary-foreground: 0.12 0.02 250;
+  /* Neon cyan primary */
+  --primary: 0.85 0.16 200;
+  --primary-foreground: 0.12 0.03 250;
+  /* Hot magenta secondary/accent */
+  --secondary: 0.65 0.27 350;
+  --secondary-foreground: 0.98 0.01 350;
 
-  /* Stronger contrast */
-  --muted: 0.92 0.01 250;
-  --muted-foreground: 0.45 0.02 250;
-  --accent: 0.72 0.22 40;
-  --accent-foreground: 0.98 0 0;
+  --muted: 0.20 0.04 285;
+  --muted-foreground: 0.72 0.04 285;
+  --accent: 0.65 0.27 350;
+  --accent-foreground: 0.98 0.01 350;
 
-  --destructive: 0.58 0.23 25;
+  --destructive: 0.62 0.24 25;
   --destructive-foreground: 0.98 0 0;
-  --border: 0.82 0.02 250;
-  --input: 0.95 0.01 250;
-  --ring: 0.65 0.23 255;
+  --border: 0.30 0.06 285;
+  --input: 0.18 0.04 285;
+  --ring: 0.85 0.16 200;
 
-  --chart-1: 0.65 0.23 255;
-  --chart-2: 0.72 0.22 40;
-  --chart-3: 0.83 0.17 145;
-  --chart-4: 0.55 0.2 320;
-  --chart-5: 0.7 0.18 200;
+  --chart-1: 0.85 0.16 200;
+  --chart-2: 0.65 0.27 350;
+  --chart-3: 0.55 0.25 290;
+  --chart-4: 0.80 0.16 75;
+  --chart-5: 0.85 0.20 130;
 
-  --radius: 0.6rem;
-}
+  --radius: 0.75rem;
 
-.dark {
-  /* Dark mode - higher contrast */
-  --background: 0.06 0.02 260;
-  --foreground: 0.98 0.01 250;
-  --card: 0.12 0.02 260;
-  --card-foreground: 0.98 0.01 250;
-  --popover: 0.12 0.02 260;
-  --popover-foreground: 0.98 0.01 250;
-
-  --primary: 0.74 0.24 255;
-  --primary-foreground: 0.06 0 0;
-  --secondary: 0.82 0.20 145;
-  --secondary-foreground: 0.06 0 0;
-
-  --muted: 0.18 0.02 260;
-  --muted-foreground: 0.78 0.01 250;
-  --accent: 0.82 0.23 40;
-  --accent-foreground: 0.06 0 0;
-
-  --destructive: 0.70 0.23 25;
-  --destructive-foreground: 0.06 0 0;
-  --border: 0.34 0.03 260;
-  --input: 0.14 0.02 260;
-  --ring: 0.74 0.24 255;
-
-  --chart-1: 0.74 0.24 255;
-  --chart-2: 0.82 0.23 40;
-  --chart-3: 0.82 0.20 145;
-  --chart-4: 0.64 0.20 320;
-  --chart-5: 0.76 0.18 200;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
+  /* Sidebar (single dark set) */
+  --sidebar-background: 0.13 0.045 285;
+  --sidebar-foreground: 0.92 0.02 285;
+  --sidebar-primary: 0.85 0.16 200;
+  --sidebar-primary-foreground: 0.12 0.03 250;
+  --sidebar-accent: 0.20 0.05 285;
+  --sidebar-accent-foreground: 0.95 0.02 285;
+  --sidebar-border: 0.30 0.06 285;
+  --sidebar-ring: 0.85 0.16 200;
 }
 
 .hide-scrollbar{
@@ -84,7 +58,7 @@ body {
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: oklch(var(--primary)/0.4) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -96,40 +70,17 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: oklch(var(--primary) / 0.4);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: oklch(var(--primary) / 0.7);
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-}
-
-@layer base {
-  :root {
-    --sidebar-background: 0.92 0 0;      /* Light sidebar for light mode */
-    --sidebar-foreground: 0.12 0 0;
-    --sidebar-primary: 0.6 0.2 250;
-    --sidebar-primary-foreground: 0.98 0 0;
-    --sidebar-accent: 0.85 0 0;
-    --sidebar-accent-foreground: 0.12 0 0;
-    --sidebar-border: 0.8 0 0;
-    --sidebar-ring: 0.6 0.2 250;
-  }
-  .dark {
-    --sidebar-background: 0.12 0 0;     /* Dark sidebar for dark mode */
-    --sidebar-foreground: 0.95 0 0;
-    --sidebar-primary: 0.65 0.2 250;
-    --sidebar-primary-foreground: 0.08 0 0;
-    --sidebar-accent: 0.2 0 0;
-    --sidebar-accent-foreground: 0.95 0 0;
-    --sidebar-border: 0.25 0 0;
-    --sidebar-ring: 0.65 0.2 250;
   }
 }
 
@@ -142,7 +93,39 @@ body {
     background-color: oklch(var(--background));
     color: oklch(var(--foreground));
     background-image:
-      radial-gradient(1200px 600px at 10% -10%, oklch(var(--primary)/0.12), transparent 60%),
-      radial-gradient(900px 500px at 90% 0%, oklch(var(--accent)/0.12), transparent 60%);
+      radial-gradient(1100px 550px at 12% -10%, oklch(var(--primary)/0.10), transparent 60%),
+      radial-gradient(950px 520px at 88% -5%, oklch(var(--accent)/0.14), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, oklch(0.55 0.25 290 / 0.10), transparent 60%);
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: var(--font-display), system-ui, sans-serif; }
+
+  .text-glow-cyan { text-shadow: 0 0 18px oklch(var(--primary) / 0.55); }
+  .text-glow-magenta { text-shadow: 0 0 18px oklch(var(--accent) / 0.55); }
+
+  .neon-cyan { box-shadow: 0 0 18px oklch(var(--primary) / 0.45); }
+  .neon-magenta { box-shadow: 0 0 18px oklch(var(--accent) / 0.5); }
+
+  .neon-border-hover {
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .neon-border-hover:hover {
+    border-color: oklch(var(--primary));
+    box-shadow: 0 0 26px oklch(var(--primary) / 0.40);
+  }
+
+  .section-rail::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.1em;
+    margin-right: 0.6rem;
+    vertical-align: -0.15em;
+    border-radius: 2px;
+    background: linear-gradient(oklch(var(--primary)), oklch(var(--accent)));
+    box-shadow: 0 0 10px oklch(var(--primary) / 0.8);
   }
 }
